@@ -11,6 +11,7 @@ const Favorites = lazy(() => import("./pages/Favorites"));
 
 export default function App() {
   return (
+    // Layout shares structure (header, footer, etc) for every page
     <Layout>
       <Suspense fallback={<div className="text-center">Loading…</div>}>
         <Routes>

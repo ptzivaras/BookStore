@@ -1,8 +1,12 @@
-export default function Favorites() {
-  return (
-    <div>
-      <h1 className="text-2xl font-semibold">Favorites</h1>
-      <p className="mt-2 text-slate-600">Your favorite books will show here.</p>
-    </div>
-  );
+const KEY = 'bookstore.favorites'
+
+
+export const getFavorites = () => new Set(JSON.parse(localStorage.getItem(KEY) || '[]'))
+
+
+export function toggleFavorite(isbn) {
+const set = getFavorites()
+if (set.has(isbn)) set.delete(isbn); else set.add(isbn)
+localStorage.setItem(KEY, JSON.stringify(Array.from(set)))
+return set
 }
