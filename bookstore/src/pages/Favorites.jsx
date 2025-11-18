@@ -1,12 +1,24 @@
-const KEY = "bookstore.favorites";
+import { useEffect, useState } from "react";
+import { fetchBooks } from "../services/api";
+import { getFavorites } from "../services/favorites";
+import BookCard from "../components/BookCard";
 
-export const getFavorites = () =>
-  new Set(JSON.parse(localStorage.getItem(KEY) || "[]"));
+export default function Favorites() {
+  const [books, setBooks] = useState([]);
 
-export function toggleFavorite(isbn) {
-  const set = getFavorites();
-  if (set.has(isbn)) set.delete(isbn);
-  else set.add(isbn);
-  localStorage.setItem(KEY, JSON.stringify(Array.from(set)));
-  return set;
+  useEffect(() => {
+    const set = getFavorites();
+    fetchBooks().then((list) => setBooks(list.filter((b) => set.has(b.isbn))));
+  }, []);
+
+  return (
+    <div>
+      <h1 className="text-2xl font-semibold mb-4">Your Favorites</h1>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+        {books.map((b) => (
+          <BookCard key={b.isbn} book={b} />
+        ))}
+      </div>
+    </div>
+  );
 }
