@@ -1,8 +1,7 @@
-import { lazy, Suspense } from "react";
+import React, { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 
-// lazy routes (they resolve because placeholder files exist)
 const Home = lazy(() => import("./pages/Home"));
 const Search = lazy(() => import("./pages/Search"));
 const AddBook = lazy(() => import("./pages/AddBook"));
@@ -11,17 +10,16 @@ const Favorites = lazy(() => import("./pages/Favorites"));
 
 export default function App() {
   return (
-    // Layout shares structure (header, footer, etc) for every page
-    <Layout>
-      <Suspense fallback={<div className="text-center">Loading…</div>}>
-        <Routes>
+    <Suspense fallback={<div className="text-center">Loading…</div>}>
+      <Routes>
+        <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="search" element={<Search />} />
           <Route path="add" element={<AddBook />} />
           <Route path="book/:isbn" element={<BookDetail />} />
           <Route path="favorites" element={<Favorites />} />
-        </Routes>
-      </Suspense>
-    </Layout>
+        </Route>
+      </Routes>
+    </Suspense>
   );
 }

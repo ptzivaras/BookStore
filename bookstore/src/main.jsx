@@ -1,13 +1,16 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App.jsx";
 import "./styles.css";
-import App from "./App";
-
-const router = createBrowserRouter([{ path: "/*", element: <App /> }]);
+import { FavoritesProvider } from "./context/FavoritesContext";
 
 createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <BrowserRouter>
+      <FavoritesProvider>
+        <App />
+      </FavoritesProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

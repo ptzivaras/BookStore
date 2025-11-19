@@ -1,19 +1,26 @@
+import React from "react";
+
 export default function CategoryFilter({ categories, selected, onChange }) {
   return (
-    <div className="flex gap-3 flex-wrap mb-6">
-      {categories.map((cat) => (
-        <button
-          key={cat}
-          onClick={() => onChange(cat)}
-          className={`px-3 py-1 rounded border ${
-            selected === cat
-              ? "bg-indigo-600 text-white border-indigo-600"
-              : "bg-white text-slate-700 border-slate-300"
-          }`}
-        >
-          {cat}
-        </button>
-      ))}
+    <div className="category-filter" style={{ marginBottom: "20px" }}>
+      <label style={{ marginRight: "10px", fontWeight: "bold" }}>Category:</label>
+      <select
+        value={selected}
+        onChange={(e) => onChange(e.target.value)}
+        style={{
+          padding: "8px",
+          borderRadius: "6px",
+          border: "1px solid #ccc",
+        }}
+      >
+        <option value="all">All</option>
+
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat}
+          </option>
+        ))}
+      </select>
     </div>
   );
 }

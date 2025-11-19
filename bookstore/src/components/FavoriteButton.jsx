@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
-import { isFavorite, toggleFavorite } from "../utils/favorites";
+import React from "react";
+import { useFavorites } from "../context/FavoritesContext";
 
-export default function FavoriteButton({ isbn }) {
-  const [fav, setFav] = useState(false);
-
-  useEffect(() => {
-    setFav(isFavorite(isbn));
-  }, [isbn]);
-
-  function handleClick() {
-    const updated = toggleFavorite(isbn);
-    setFav(updated.includes(isbn));
-  }
+/**
+ * FavoriteButton
+ * - Controlled by global FavoritesContext
+ * - Renders differently when favorited
+ */
+export default function FavoriteButton({ isbn, className = "" }) {
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const fav = isFavorite(isbn);
 
   return (
     <button
-      onClick={handleClick}
-      className={`btn ${fav ? "bg-yellow-400 border-yellow-400" : ""}`}
+      onClick={() => toggleFavorite(isbn)}
+      aria-pressed={fav}
+      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm border transition ${className} ${
+        fav ? "bg-amber-100 border-amber-300" : "bg-white border-slate-300"
+      }`}
     >
-      {fav ? "★ Favorite" : "☆ Add to Favorites"}
+      {fav ? "★ Favorited" : "☆ Favorite"}
     </button>
   );
 }
