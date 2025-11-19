@@ -1,16 +1,24 @@
-import React from "react";
+import { useState } from "react";
 
-const SearchBar = ({ searchTerm, setSearchTerm }) => {
+export default function SearchBar({ onSearch }) {
+  const [term, setTerm] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch(term);
+  };
+
   return (
-    <div className="search-bar">
+    <form onSubmit={handleSubmit} className="flex gap-2 mb-4">
       <input
-        type="text"
+        value={term}
+        onChange={(e) => setTerm(e.target.value)}
         placeholder="Search books..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
+        className="input w-full"
       />
-    </div>
+      <button type="submit" className="btn">
+        Search
+      </button>
+    </form>
   );
-};
-
-export default SearchBar;
+}
