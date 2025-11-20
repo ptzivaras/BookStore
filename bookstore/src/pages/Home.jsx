@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { getBooks } from "../services/bookApi";
+import { fetchBooks, getBookByIsbn, createBook, updateBook, deleteBook } from "../services/api";
+
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
 import CategoryFilter from "../components/CategoryFilter";
@@ -12,11 +13,23 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 6;
 
-  useEffect(() => {
-    const data = getBooks();
-    setBooks(data);
-    setFilteredBooks(data);
-  }, []);
+   useEffect(() => {
+     let alive = true;
+    (async () => {
+      try {
+        const data = await fetchBooks();
+        if (!alive) return;
+        setBooks(data);
+        setFilteredBooks(data);
+      } catch (err) {
+        console.error("Failed to load books", err);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+   }, []);
+
 
   // Extract categories dynamically
   const categories = [...new Set(books.map((b) => b.publisher))];

@@ -6,6 +6,7 @@ const Home = lazy(() => import("./pages/Home"));
 const Search = lazy(() => import("./pages/Search"));
 const AddBook = lazy(() => import("./pages/AddBook"));
 const BookDetail = lazy(() => import("./pages/BookDetail"));
+const EditBook = lazy(() => import("./pages/EditBook"));
 const Favorites = lazy(() => import("./pages/Favorites"));
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="search" element={<Search />} />
           <Route path="add" element={<AddBook />} />
           <Route path="book/:isbn" element={<BookDetail />} />
+          <Route path="edit/:isbn" element={<EditBook />} />
           <Route path="favorites" element={<Favorites />} />
         </Route>
       </Routes>
