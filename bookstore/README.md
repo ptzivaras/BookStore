@@ -12,10 +12,15 @@ api.js now includes
 ✔ Safe JSON shape handling
 
 # Todo
--Pagination inside BooksList
--Search page improvements
--Sorting system
--Book categories system
+-Pagination inside BooksList (Done)
+-Search page improvements (Done)
+-Sorting system (Done)
+-Book categories system (Done)
+
+27/21 TodoList
+-Error Toast Notifications
+-Dark Mode toggle
+-Final cleanup + profiling explanation
 
 # Files
 -components:bookcard categoryfilter favoritebutton layout paginaton risingstar searchbar

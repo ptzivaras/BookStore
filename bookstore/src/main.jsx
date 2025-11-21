@@ -4,6 +4,13 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "./components/Layout";
 import { FavoritesProvider } from "./context/FavoritesContext";
+import { useLoading } from "./context/LoadingContext";
+
+//import router from "./router";
+//import router from "./routes";
+//import { RouterProvider } from "react-router-dom";
+import LoadingOverlay from "./components/LoadingOverlay";
+import { LoadingProvider } from "./context/LoadingContext";
 
 // Pages
 import Home from "./pages/Home";
@@ -18,23 +25,32 @@ import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <FavoritesProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-
-            {/* FIXED: BooksList component name */}
-            <Route path="books" element={<BooksList />} />
-
-            <Route path="book/:isbn" element={<BookDetail />} />
-            <Route path="add" element={<AddBook />} />
-            <Route path="edit/:isbn" element={<EditBook />} />
-            <Route path="favorites" element={<Favorites />} />
-            <Route path="search" element={<Search />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </FavoritesProvider>
+    <LoadingProvider>
+      <FavoritesProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Layout />}>
+              <Route index element={<Home />} />
+              <Route path="books" element={<BooksList />} />
+              <Route path="book/:isbn" element={<BookDetail />} />
+              <Route path="add" element={<AddBook />} />
+              <Route path="edit/:isbn" element={<EditBook />} />
+              <Route path="favorites" element={<Favorites />} />
+              <Route path="search" element={<Search />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </FavoritesProvider>
+    </LoadingProvider>
   </React.StrictMode>
 );
+
+function LoadingOverlayWrapper({ children }) {
+  const { loading } = useLoading();
+  return (
+    <>
+      {loading && <LoadingOverlay />}
+      {children}
+    </>
+  );
+}

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
 import { fetchBooks } from "../services/api";
+import { useLoading } from "../context/LoadingContext";
 
 const BooksList = () => {
   const [books, setBooks] = useState([]);
@@ -13,11 +14,14 @@ const BooksList = () => {
   useEffect(() => {
     const loadBooks = async () => {
       try {
+        showLoading();
         const data = await fetchBooks();
         setBooks(data);
         setFilteredBooks(data);
       } catch (error) {
         console.error("Failed to fetch books:", error);
+      } finally {
+        hideLoading();
       }
     };
     loadBooks();
