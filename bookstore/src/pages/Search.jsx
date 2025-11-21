@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-//import { fetchBooks } from "../services/api";
 import BookCard from "../components/BookCard";
 import SearchBar from "../components/SearchBar";
-//import Filters from "../components/Filters";
 import { fetchBooks, getBookByIsbn, createBook, updateBook, deleteBook } from "../services/api";
 
 export default function Search() {

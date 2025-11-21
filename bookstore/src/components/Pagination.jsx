@@ -1,35 +1,42 @@
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import React from "react";
 
-export default function Pagination({ currentPage, totalPages, onPageChange }) {
-  const prev = () => {
-    if (currentPage > 1) onPageChange(currentPage - 1);
+const Pagination = ({ currentPage, totalPages, onPageChange }) => {
+
+  const handlePrev = () => {
+    if (currentPage > 1) {
+      onPageChange(currentPage - 1);
+    }
   };
 
-  const next = () => {
-    if (currentPage < totalPages) onPageChange(currentPage + 1);
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      onPageChange(currentPage + 1);
+    }
   };
 
   return (
-    <div className="flex items-center justify-center gap-4 mt-6">
+    <div className="flex justify-center items-center mt-6 space-x-4">
       <button
-        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-40"
-        onClick={prev}
+        onClick={handlePrev}
+        className="px-4 py-2 border rounded disabled:opacity-50"
         disabled={currentPage === 1}
       >
-        <FaChevronLeft />
+        Previous
       </button>
 
-      <span className="font-medium">
-        Page {currentPage} / {totalPages}
+      <span className="font-semibold">
+        Page {currentPage} of {totalPages}
       </span>
 
       <button
-        className="px-3 py-1 bg-gray-200 rounded disabled:opacity-40"
-        onClick={next}
+        onClick={handleNext}
+        className="px-4 py-2 border rounded disabled:opacity-50"
         disabled={currentPage === totalPages}
       >
-        <FaChevronRight />
+        Next
       </button>
     </div>
   );
-}
+};
+
+export default Pagination;
