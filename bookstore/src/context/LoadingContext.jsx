@@ -2,19 +2,14 @@ import { createContext, useContext, useState } from "react";
 
 const LoadingContext = createContext();
 
-export function LoadingProvider({ children }) {
+export const LoadingProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
-  const showLoading = () => setLoading(true);
-  const hideLoading = () => setLoading(false);
-
   return (
-    <LoadingContext.Provider value={{ loading, showLoading, hideLoading }}>
+    <LoadingContext.Provider value={{ loading, setLoading }}>
       {children}
     </LoadingContext.Provider>
   );
-}
+};
 
-export function useLoading() {
-  return useContext(LoadingContext);
-}
+export const useLoading = () => useContext(LoadingContext);

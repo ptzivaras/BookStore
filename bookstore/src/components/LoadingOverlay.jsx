@@ -1,7 +1,46 @@
-export default function LoadingOverlay() {
+import { useLoading } from "../context/LoadingContext";
+
+const LoadingOverlay = () => {
+  const { loading } = useLoading();
+
+  if (!loading) return null;
+
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm z-50">
-      <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100vw",
+        height: "100vh",
+        background: "rgba(0,0,0,0.4)",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: 9999,
+      }}
+    >
+      <div
+        style={{
+          width: "70px",
+          height: "70px",
+          border: "6px solid #ddd",
+          borderTop: "6px solid #3498db",
+          borderRadius: "50%",
+          animation: "spin 1s linear infinite",
+        }}
+      ></div>
+
+      <style>
+        {`
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}
+      </style>
     </div>
   );
-}
+};
+
+export default LoadingOverlay;

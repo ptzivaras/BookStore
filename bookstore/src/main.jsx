@@ -4,17 +4,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Layout from "./components/Layout";
 import { FavoritesProvider } from "./context/FavoritesContext";
-import { useLoading } from "./context/LoadingContext";
-
-//import router from "./router";
-//import router from "./routes";
-//import { RouterProvider } from "react-router-dom";
-import LoadingOverlay from "./components/LoadingOverlay";
 import { LoadingProvider } from "./context/LoadingContext";
+import LoadingOverlay from "./components/LoadingOverlay";
 
-// Pages
 import Home from "./pages/Home";
-import BooksList from "./pages/BooksList";   // ✔ correct import
+import BooksList from "./pages/BooksList";
 import BookDetail from "./pages/BookDetail";
 import AddBook from "./pages/AddBook";
 import EditBook from "./pages/EditBook";
@@ -28,6 +22,10 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <LoadingProvider>
       <FavoritesProvider>
         <BrowserRouter>
+
+          {/* Global spinner */}
+          <LoadingOverlay />
+
           <Routes>
             <Route path="/" element={<Layout />}>
               <Route index element={<Home />} />
@@ -39,18 +37,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
               <Route path="search" element={<Search />} />
             </Route>
           </Routes>
+
         </BrowserRouter>
       </FavoritesProvider>
     </LoadingProvider>
   </React.StrictMode>
 );
-
-function LoadingOverlayWrapper({ children }) {
-  const { loading } = useLoading();
-  return (
-    <>
-      {loading && <LoadingOverlay />}
-      {children}
-    </>
-  );
-}
