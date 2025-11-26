@@ -15,9 +15,9 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
-  const booksPerPage = 6;
+  const pageSize = 6;
 
-  // Load books (with search)
+  // --- Load books (with search) ---
   useEffect(() => {
     let alive = true;
 
@@ -31,15 +31,13 @@ export default function Home() {
       }
     })();
 
-    return () => {
-      alive = false;
-    };
+    return () => (alive = false);
   }, [searchQuery]);
 
-  // Dynamic categories (from publisher)
+  // --- Dynamic categories (publisher used as category) ---
   const categories = [...new Set(books.map((b) => b.publisher))];
 
-  // Category filter
+  // --- Apply category filter ---
   useEffect(() => {
     if (category === "all") {
       setFilteredBooks(books);
@@ -49,38 +47,54 @@ export default function Home() {
     setCurrentPage(1);
   }, [category, books]);
 
-  // Pagination
-  const indexOfLast = currentPage * booksPerPage;
-  const indexOfFirst = indexOfLast - booksPerPage;
-  const currentBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
+  // --- Pagination ---
+  const indexOfLast = currentPage * pageSize;
+  const indexOfFirst = indexOfLast - pageSize;
+  const pageBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
 
   return (
-    <div className="px-6">
-      {/* Rising Star Carousel */}
-      <RisingStar />
+    <div className="max-w-6xl mx-auto px-4 py-6">
 
-      {/* SearchBar */}
-      <SearchBar onSearch={(q) => setSearchQuery(q)} />
+      {/* Rising Star Section */}
+      <div className="mb-10">
+        <RisingStar />
+      </div>
 
-      <h2 className="text-2xl font-bold mt-6 mb-4">Book List</h2>
+      {/* Search Bar */}
+      <div className="mb-8">
+        <SearchBar onSearch={(q) => setSearchQuery(q)} />
+      </div>
 
-      <CategoryFilter
-        categories={categories}
-        selected={category}
-        onChange={setCategory}
-      />
+      {/* Header */}
+      <h2 className="text-3xl font-bold mb-6 dark:text-slate-100">
+        Book List
+      </h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-        {currentBooks.map((book) => (
+      {/* Category Filter */}
+      <div className="mb-6">
+        <CategoryFilter
+          categories={categories}
+          selected={category}
+          onChange={setCategory}
+        />
+      </div>
+
+      {/* Books Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {pageBooks.map((book) => (
           <BookCard key={book.isbn} book={book} />
         ))}
       </div>
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={Math.ceil(filteredBooks.length / booksPerPage)}
-        onPageChange={(p) => setCurrentPage(p)}
-      />
+      {/* Pagination */}
+      <div className="mt-8">
+        <Pagination
+          currentPage={currentPage}
+          totalItems={filteredBooks.length}
+          pageSize={pageSize}
+          onPageChange={(page) => setCurrentPage(page)}
+        />
+      </div>
     </div>
   );
 }
