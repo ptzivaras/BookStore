@@ -16,6 +16,7 @@ export default function EditBook() {
     description: "",
     publisher: "",
   });
+
   const [notFound, setNotFound] = useState(false);
 
   const toast = useToast();
@@ -69,6 +70,7 @@ export default function EditBook() {
         description: form.description,
         publisher: form.publisher,
       });
+
       toast.showSuccess("Book updated.");
       navigate(`/book/${isbn}`);
     } catch {
@@ -79,90 +81,99 @@ export default function EditBook() {
   }
 
   if (notFound)
-    return <p className="p-6 text-slate-600 dark:text-slate-400">Book not found.</p>;
+    return (
+      <p className="p-6 text-slate-600 dark:text-slate-400">
+        Book not found.
+      </p>
+    );
 
   return (
-    <div className="max-w-2xl">
-      <h2 className="text-2xl font-semibold mb-4 dark:text-slate-100">Edit Book</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="label">Title</label>
-          <input
-            name="title"
-            className="input"
-            value={form.title}
-            onChange={handleChange}
-            required
-          />
-        </div>
+    <div className="max-w-2xl mx-auto">
+      <div className="card p-6 space-y-6">
+        <h2 className="text-2xl font-semibold dark:text-slate-100">
+          Edit Book
+        </h2>
 
-        <div>
-          <label className="label">Subtitle</label>
-          <input
-            name="subtitle"
-            className="input"
-            value={form.subtitle}
-            onChange={handleChange}
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="label">Title</label>
+            <input
+              name="title"
+              className="input"
+              value={form.title}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <div>
-          <label className="label">Author</label>
-          <input
-            name="author"
-            className="input"
-            value={form.author}
-            onChange={handleChange}
-            required
-          />
-        </div>
+          <div>
+            <label className="label">Subtitle</label>
+            <input
+              name="subtitle"
+              className="input"
+              value={form.subtitle}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div>
-          <label className="label">Publisher</label>
-          <input
-            name="publisher"
-            className="input"
-            value={form.publisher}
-            onChange={handleChange}
-          />
-        </div>
+          <div>
+            <label className="label">Author</label>
+            <input
+              name="author"
+              className="input"
+              value={form.author}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <div>
-          <label className="label">Pages</label>
-          <input
-            name="pages"
-            className="input"
-            value={form.pages}
-            onChange={handleChange}
-          />
-        </div>
+          <div>
+            <label className="label">Publisher</label>
+            <input
+              name="publisher"
+              className="input"
+              value={form.publisher}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div>
-          <label className="label">Description</label>
-          <textarea
-            name="description"
-            className="input min-h-[120px]"
-            value={form.description}
-            onChange={handleChange}
-          />
-        </div>
+          <div>
+            <label className="label">Pages</label>
+            <input
+              name="pages"
+              className="input"
+              value={form.pages}
+              onChange={handleChange}
+            />
+          </div>
 
-        <div className="flex gap-3">
-          <button
-            className="btn bg-indigo-600 text-white"
-            type="submit"
-          >
-            Save
-          </button>
-          <button
-            type="button"
-            className="btn"
-            onClick={() => navigate(-1)}
-          >
-            Cancel
-          </button>
-        </div>
-      </form>
+          <div>
+            <label className="label">Description</label>
+            <textarea
+              name="description"
+              className="input min-h-[120px]"
+              value={form.description}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              className="btn bg-indigo-600 text-white"
+              type="submit"
+            >
+              Save
+            </button>
+            <button
+              type="button"
+              className="btn"
+              onClick={() => navigate(-1)}
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
