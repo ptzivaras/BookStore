@@ -1,42 +1,102 @@
-import { Outlet, Link } from "react-router-dom";
-import { useFavorites } from "../context/FavoritesContext";
-import Footer from "./Footer";
+import React from "react";
+import { NavLink, Outlet } from "react-router-dom";
 
 export default function Layout() {
-  const { favorites } = useFavorites();
-
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
-      {/* NAVBAR */}
-      <header className="bg-white shadow px-6 py-4 flex justify-between items-center">
-        <Link to="/" className="text-2xl font-bold text-indigo-600">
-          Book Explorer
-        </Link>
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+      {/* Header */}
+      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur border-b border-slate-200">
+        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
+          <NavLink to="/" className="text-2xl font-bold tracking-tight">
+            Bookstore
+          </NavLink>
 
-        <nav className="flex gap-6 text-sm font-medium">
-          <Link to="/books" className="hover:text-indigo-600">Books</Link>
-          <Link to="/add" className="hover:text-indigo-600">Add Book</Link>
+          <nav className="flex gap-4 text-sm">
+            <NavLink
+              to="/"
+              end
+              className={({ isActive }) =>
+                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+              }
+            >
+              Home
+            </NavLink>
 
-          <Link to="/favorites" className="hover:text-indigo-600 flex items-center gap-1">
-            Favorites
-            {favorites.length > 0 && (
-              <span className="bg-indigo-600 text-white text-xs px-2 py-0.5 rounded-full">
-                {favorites.length}
-              </span>
-            )}
-          </Link>
+            <NavLink
+              to="/books"
+              className={({ isActive }) =>
+                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+              }
+            >
+              Books
+            </NavLink>
 
-          <Link to="/search" className="hover:text-indigo-600">Search</Link>
-        </nav>
+            <NavLink
+              to="/search"
+              className={({ isActive }) =>
+                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+              }
+            >
+              Search
+            </NavLink>
+
+            <NavLink
+              to="/add"
+              className={({ isActive }) =>
+                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+              }
+            >
+              Add Book
+            </NavLink>
+
+            <NavLink
+              to="/favorites"
+              className={({ isActive }) =>
+                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+              }
+            >
+              Favorites
+            </NavLink>
+          </nav>
+        </div>
       </header>
 
-      {/* MAIN CONTENT */}
-      <main className="flex-1 px-6 py-6">
+      {/* Main content */}
+      <main className="mx-auto w-full max-w-6xl px-4 py-8 grow">
         <Outlet />
       </main>
 
-      {/* FOOTER */}
-      <Footer />
+      {/* Footer (polished) */}
+      <footer className="border-t border-slate-200">
+        <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-500">
+          <p>
+            © {new Date().getFullYear()} Bookstore. All rights reserved.
+          </p>
+
+          <div className="flex gap-3">
+            <NavLink
+              to="/books"
+              className="hover:text-slate-700 transition-colors"
+            >
+              Browse books
+            </NavLink>
+            <NavLink
+              to="/favorites"
+              className="hover:text-slate-700 transition-colors"
+            >
+              Favorites
+            </NavLink>
+            <a
+              href="https://github.com/ptzivaras/BookStore"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-slate-700 transition-colors"
+            >
+              GitHub
+            </a>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
