@@ -92,66 +92,48 @@ export default function BooksList() {
   const indexOfFirst = indexOfLast - pageSize;
   const pageBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
 
-  return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
+return (
+  <div className="max-w-6xl mx-auto px-4 py-6">
+    <h1 className="text-3xl font-bold mb-6 dark:text-slate-100">Books</h1>
 
-      <h1 className="text-3xl font-bold mb-6 dark:text-slate-100">
-        Books Library
-      </h1>
+    {/* Filters Row */}
+    <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
+      <CategoryFilter
+        categories={categories}
+        selected={category}
+        onChange={handleCategoryChange}
+      />
 
-      {/* Filter + Sort Toolbar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <select
+        value={sortOption}
+        onChange={(e) => handleSort(e.target.value)}
+        className="input w-full sm:w-auto"
+      >
+        <option value="">Sort by...</option>
+        <option value="title">Title (A-Z)</option>
+        <option value="author">Author (A-Z)</option>
+        <option value="rating">Rating (High → Low)</option>
+        <option value="year">Year (New → Old)</option>
+      </select>
+    </div>
 
-        {/* Category Selector */}
-        <div className="w-full sm:w-auto">
-          <CategoryFilter
-            categories={categories}
-            selected={category}
-            onChange={handleCategoryChange}
-          />
-        </div>
+    {/* Grid */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {pageBooks.map((book) => (
+        <BookCard key={book.isbn} book={book} />
+      ))}
+    </div>
 
-        {/* Sort Selector */}
-        <select
-          value={sortOption}
-          onChange={(e) => handleSort(e.target.value)}
-          className="
-            px-3 py-2 rounded border 
-            bg-white text-slate-900
-            border-slate-300 
-            dark:bg-slate-800 dark:text-slate-100 dark:border-slate-600
-            hover:bg-gray-100 dark:hover:bg-slate-700
-            transition
-          "
-        >
-          <option value="">Sort by…</option>
-          <option value="title">Title (A–Z)</option>
-          <option value="author">Author (A–Z)</option>
-          <option value="rating">Rating (High → Low)</option>
-          <option value="year">Year (New → Old)</option>
-        </select>
-      </div>
-
-      {/* Book Grid */}
-      {pageBooks.length === 0 ? (
-        <p className="text-slate-600 dark:text-slate-300">
-          No books match the selected filters.
-        </p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {pageBooks.map((book) => (
-            <BookCard key={book.isbn} book={book} />
-          ))}
-        </div>
-      )}
-
-      {/* Pagination */}
+    {/* Pagination */}
+    <div className="mt-8">
       <Pagination
         currentPage={currentPage}
         totalItems={filteredBooks.length}
         pageSize={pageSize}
-        onPageChange={(p) => setCurrentPage(p)}
+        onPageChange={(page) => setCurrentPage(page)}
       />
     </div>
-  );
+  </div>
+);
+
 }

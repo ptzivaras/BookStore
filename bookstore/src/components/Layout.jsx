@@ -90,28 +90,37 @@ export default function Layout() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 dark:border-gray-700">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-500 dark:text-gray-400">
-          <p>© {new Date().getFullYear()} Bookstore. All rights reserved.</p>
+<footer className="border-t border-slate-200 dark:border-slate-700">
+  <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-600 dark:text-slate-300">
+    <p>
+      © {new Date().getFullYear()} Bookstore. All rights reserved.
+    </p>
 
-          <div className="flex gap-3">
-            <NavLink to="/books" className="hover:text-slate-700 dark:hover:text-gray-200">
-              Browse books
-            </NavLink>
-            <NavLink to="/favorites" className="hover:text-slate-700 dark:hover:text-gray-200">
-              Favorites
-            </NavLink>
-            <a
-              href="https://github.com/ptzivaras/BookStore"
-              target="_blank"
-              rel="noreferrer"
-              className="hover:text-slate-700 dark:hover:text-gray-200"
-            >
-              GitHub
-            </a>
-          </div>
-        </div>
-      </footer>
+    <div className="flex gap-3">
+      <NavLink
+        to="/books"
+        className="hover:text-slate-900 dark:hover:text-white transition"
+      >
+        Browse books
+      </NavLink>
+      <NavLink
+        to="/favorites"
+        className="hover:text-slate-900 dark:hover:text-white transition"
+      >
+        Favorites
+      </NavLink>
+      <a
+        href="https://github.com/ptzivaras/BookStore"
+        target="_blank"
+        rel="noreferrer"
+        className="hover:text-slate-900 dark:hover:text-white transition"
+      >
+        GitHub
+      </a>
+    </div>
+  </div>
+</footer>
+
     </div>
   );
 }

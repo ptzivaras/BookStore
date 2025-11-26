@@ -10,16 +10,28 @@ export default function BookCard({ book }) {
       : `https://picsum.photos/seed/${book.isbn}/300/400`;
 
   return (
-    <div className="card bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 p-4 rounded-lg shadow dark:shadow-none">
+    <div
+      className="
+        card 
+        p-4 
+        bg-white dark:bg-slate-800 
+        border border-slate-200 dark:border-slate-700
+        rounded-xl 
+        shadow-sm hover:shadow-md 
+        transition
+      "
+    >
       <img
         src={cover}
         alt={book.title}
         className="w-full h-48 object-cover rounded-md mb-3"
       />
 
-      <h3 className="font-semibold text-lg leading-tight dark:text-slate-100">{book.title}</h3>
+      <h3 className="font-semibold text-lg text-slate-900 dark:text-slate-100">
+        {book.title}
+      </h3>
 
-      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+      <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">
         {book.author}
       </p>
 
@@ -29,7 +41,14 @@ export default function BookCard({ book }) {
 
       <Link
         to={`/book/${book.isbn}`}
-        className="block mt-4 bg-indigo-600 hover:bg-indigo-700 text-white text-center py-2 rounded-md text-sm"
+        className="
+          block mt-4 
+          bg-indigo-600 hover:bg-indigo-700 
+          text-white text-center 
+          py-2 
+          rounded-md 
+          text-sm
+        "
       >
         View Details
       </Link>
