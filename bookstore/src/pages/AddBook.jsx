@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { createBook } from "../services/api";
 import { validateBook } from "../utils/validation";
+import { useToast } from "../context/ToastContext";
+import { useLoading } from "../context/LoadingContext";
 
 export default function AddBook() {
   const [form, setForm] = useState({
@@ -17,17 +19,24 @@ export default function AddBook() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");
 
+  const toast = useToast();
+  const { showLoading, hideLoading } = useLoading();
+
   function update(name, value) {
     setForm((prev) => ({ ...prev, [name]: value }));
   }
 
   async function onSubmit(e) {
     e.preventDefault();
+
     const err = validateBook(form);
     setErrors(err);
     if (Object.keys(err).length) return;
+
     setStatus("loading");
     try {
+      showLoading();
+
       await createBook({
         isbn: form.isbn13,
         title: form.title,
@@ -39,7 +48,10 @@ export default function AddBook() {
         description: form.description,
         website: "#",
       });
+
       setStatus("success");
+      toast.showSuccess("Book created successfully.");
+
       setForm({
         title: "",
         description: "",
@@ -51,9 +63,14 @@ export default function AddBook() {
         isbn10: "",
         isbn13: "",
       });
+      setErrors({});
     } catch (err) {
       setStatus("error");
-      setErrors({ form: err.message });
+      const msg = err?.message || "Failed to create book.";
+      setErrors({ form: msg });
+      toast.showError(msg);
+    } finally {
+      hideLoading();
     }
   }
 
@@ -157,7 +174,9 @@ export default function AddBook() {
             )
           }
         />
-        {errors.authors && <p className="text-red-600 text-sm">{errors.authors}</p>}
+        {errors.authors && (
+          <p className="text-red-600 text-sm">{errors.authors}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -168,7 +187,9 @@ export default function AddBook() {
             value={form.isbn10}
             onChange={(e) => update("isbn10", e.target.value)}
           />
-          {errors.isbn10 && <p className="text-red-600 text-sm">{errors.isbn10}</p>}
+          {errors.isbn10 && (
+            <p className="text-red-600 text-sm">{errors.isbn10}</p>
+          )}
         </div>
         <div>
           <label className="label">ISBN-13</label>
@@ -177,7 +198,9 @@ export default function AddBook() {
             value={form.isbn13}
             onChange={(e) => update("isbn13", e.target.value)}
           />
-          {errors.isbn13 && <p className="text-red-600 text-sm">{errors.isbn13}</p>}
+          {errors.isbn13 && (
+            <p className="text-red-600 text-sm">{errors.isbn13}</p>
+          )}
         </div>
       </div>
 

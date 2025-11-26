@@ -17,38 +17,52 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 6;
 
-  // Fetch books
+  // Load books (with search)
   useEffect(() => {
     let alive = true;
 
     (async () => {
-      const data = await fetchBooks({ q: searchQuery });
-      if (!alive) return;
-      setBooks(data);
+      try {
+        const data = await fetchBooks({ q: searchQuery });
+        if (!alive) return;
+        setBooks(data);
+      } catch (err) {
+        console.error("Failed to load books", err);
+      }
     })();
 
-    return () => (alive = false);
+    return () => {
+      alive = false;
+    };
   }, [searchQuery]);
 
+  // Dynamic categories (from publisher)
   const categories = [...new Set(books.map((b) => b.publisher))];
 
+  // Category filter
   useEffect(() => {
-    if (category === "all") setFilteredBooks(books);
-    else setFilteredBooks(books.filter((b) => b.publisher === category));
-
+    if (category === "all") {
+      setFilteredBooks(books);
+    } else {
+      setFilteredBooks(books.filter((b) => b.publisher === category));
+    }
     setCurrentPage(1);
   }, [category, books]);
 
+  // Pagination
   const indexOfLast = currentPage * booksPerPage;
-  const currentBooks = filteredBooks.slice(indexOfLast - booksPerPage, indexOfLast);
+  const indexOfFirst = indexOfLast - booksPerPage;
+  const currentBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
 
   return (
-    <div className="container-default py-6">
+    <div className="px-6">
+      {/* Rising Star Carousel */}
       <RisingStar />
 
-      <SearchBar onSearch={setSearchQuery} />
+      {/* SearchBar */}
+      <SearchBar onSearch={(q) => setSearchQuery(q)} />
 
-      <h2 className="section-title">Book List</h2>
+      <h2 className="text-2xl font-bold mt-6 mb-4">Book List</h2>
 
       <CategoryFilter
         categories={categories}
@@ -65,7 +79,7 @@ export default function Home() {
       <Pagination
         currentPage={currentPage}
         totalPages={Math.ceil(filteredBooks.length / booksPerPage)}
-        onPageChange={setCurrentPage}
+        onPageChange={(p) => setCurrentPage(p)}
       />
     </div>
   );

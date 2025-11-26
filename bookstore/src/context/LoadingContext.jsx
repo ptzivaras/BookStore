@@ -1,15 +1,20 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 
 const LoadingContext = createContext();
 
-export const LoadingProvider = ({ children }) => {
+export function LoadingProvider({ children }) {
   const [loading, setLoading] = useState(false);
 
+  const showLoading = useCallback(() => setLoading(true), []);
+  const hideLoading = useCallback(() => setLoading(false), []);
+
   return (
-    <LoadingContext.Provider value={{ loading, setLoading }}>
+    <LoadingContext.Provider value={{ loading, showLoading, hideLoading }}>
       {children}
     </LoadingContext.Provider>
   );
-};
+}
 
-export const useLoading = () => useContext(LoadingContext);
+export function useLoading() {
+  return useContext(LoadingContext);
+}

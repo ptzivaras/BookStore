@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchBooks, getBookByIsbn, createBook, updateBook, deleteBook } from "../services/api";
+import { getBookByIsbn, updateBook } from "../services/api";
+import { useToast } from "../context/ToastContext";
+import { useLoading } from "../context/LoadingContext";
 
 export default function EditBook() {
   const { isbn } = useParams();
@@ -16,11 +18,15 @@ export default function EditBook() {
   });
   const [notFound, setNotFound] = useState(false);
 
+  const toast = useToast();
+  const { showLoading, hideLoading } = useLoading();
+
   useEffect(() => {
     let alive = true;
 
     (async () => {
       try {
+        showLoading();
         const b = await getBookByIsbn(isbn);
         if (!alive) return;
 
@@ -34,6 +40,9 @@ export default function EditBook() {
         });
       } catch {
         setNotFound(true);
+        toast.showError("Book not found.");
+      } finally {
+        hideLoading();
       }
     })();
 
@@ -47,20 +56,30 @@ export default function EditBook() {
     setForm((p) => ({ ...p, [name]: value }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    updateBook(isbn, {
-      title: form.title,
-      subtitle: form.subtitle,
-      author: form.author,
-      pages: Number(form.pages) || form.pages,
-      description: form.description,
-      publisher: form.publisher,
-    });
-    navigate(`/book/${isbn}`);
+
+    try {
+      showLoading();
+      await updateBook(isbn, {
+        title: form.title,
+        subtitle: form.subtitle,
+        author: form.author,
+        pages: Number(form.pages) || form.pages,
+        description: form.description,
+        publisher: form.publisher,
+      });
+      toast.showSuccess("Book updated.");
+      navigate(`/book/${isbn}`);
+    } catch {
+      toast.showError("Failed to update book.");
+    } finally {
+      hideLoading();
+    }
   }
 
-  if (notFound) return <p className="p-6 text-slate-600">Book not found.</p>;
+  if (notFound)
+    return <p className="p-6 text-slate-600">Book not found.</p>;
 
   return (
     <div className="max-w-2xl">
@@ -68,37 +87,80 @@ export default function EditBook() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="label">Title</label>
-          <input name="title" className="input" value={form.title} onChange={handleChange} required />
+          <input
+            name="title"
+            className="input"
+            value={form.title}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div>
           <label className="label">Subtitle</label>
-          <input name="subtitle" className="input" value={form.subtitle} onChange={handleChange} />
+          <input
+            name="subtitle"
+            className="input"
+            value={form.subtitle}
+            onChange={handleChange}
+          />
         </div>
 
         <div>
           <label className="label">Author</label>
-          <input name="author" className="input" value={form.author} onChange={handleChange} required />
+          <input
+            name="author"
+            className="input"
+            value={form.author}
+            onChange={handleChange}
+            required
+          />
         </div>
 
         <div>
           <label className="label">Publisher</label>
-          <input name="publisher" className="input" value={form.publisher} onChange={handleChange} />
+          <input
+            name="publisher"
+            className="input"
+            value={form.publisher}
+            onChange={handleChange}
+          />
         </div>
 
         <div>
           <label className="label">Pages</label>
-          <input name="pages" className="input" value={form.pages} onChange={handleChange} />
+          <input
+            name="pages"
+            className="input"
+            value={form.pages}
+            onChange={handleChange}
+          />
         </div>
 
         <div>
           <label className="label">Description</label>
-          <textarea name="description" className="input min-h-[120px]" value={form.description} onChange={handleChange} />
+          <textarea
+            name="description"
+            className="input min-h-[120px]"
+            value={form.description}
+            onChange={handleChange}
+          />
         </div>
 
         <div className="flex gap-3">
-          <button className="btn bg-indigo-600 text-white" type="submit">Save</button>
-          <button type="button" className="btn" onClick={() => navigate(-1)}>Cancel</button>
+          <button
+            className="btn bg-indigo-600 text-white"
+            type="submit"
+          >
+            Save
+          </button>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => navigate(-1)}
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </div>

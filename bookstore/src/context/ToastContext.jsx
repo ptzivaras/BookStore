@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback } from "react";
+import ToastContainer from "../components/ToastContainer";
 
 const ToastContext = createContext();
 
@@ -21,12 +22,13 @@ export function ToastProvider({ children }) {
     showInfo: (msg) => show(msg, "info"),
   };
 
-  return (
+    return (
     <ToastContext.Provider value={ctx}>
-      {children}
-      {/* Toast UI rendered here */}
+        {children}
+        <ToastContainer toasts={toasts} />
     </ToastContext.Provider>
-  );
+    );
+
 }
 
 export function useToast() {

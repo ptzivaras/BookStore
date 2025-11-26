@@ -4,6 +4,7 @@ import Pagination from "../components/Pagination";
 import CategoryFilter from "../components/CategoryFilter";
 import { fetchBooks } from "../services/api";
 import { useLoading } from "../context/LoadingContext";
+import { useToast } from "../context/ToastContext";
 
 const BooksList = () => {
   const [books, setBooks] = useState([]);
@@ -11,7 +12,9 @@ const BooksList = () => {
   const [sortOption, setSortOption] = useState("");
   const [category, setCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+
   const { showLoading, hideLoading } = useLoading();
+  const toast = useToast();
   const pageSize = 6;
 
   useEffect(() => {
@@ -21,6 +24,8 @@ const BooksList = () => {
         const data = await fetchBooks();
         setBooks(data);
         setFilteredBooks(data);
+      } catch {
+        toast.showError("Failed to load books.");
       } finally {
         hideLoading();
       }
@@ -28,7 +33,7 @@ const BooksList = () => {
     loadBooks();
   }, []);
 
-  // Extract all categories dynamically
+  // Extract all categories dynamically (from derived `category` field)
   const categories = [...new Set(books.map((b) => b.category))];
 
   // Category filtering
@@ -62,10 +67,14 @@ const BooksList = () => {
         sorted.sort((a, b) => a.author.localeCompare(b.author));
         break;
       case "rating":
-        sorted.sort((a, b) => b.rating - a.rating);
+        sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
         break;
       case "year":
-        sorted.sort((a, b) => b.year - a.year);
+        sorted.sort(
+          (a, b) =>
+            (new Date(b.published).getFullYear() || 0) -
+            (new Date(a.published).getFullYear() || 0)
+        );
         break;
     }
     return sorted;
@@ -74,8 +83,7 @@ const BooksList = () => {
   const handleSort = (option) => {
     setSortOption(option);
 
-    let sorted = applySorting(filteredBooks, option);
-
+    const sorted = applySorting(filteredBooks, option);
     setFilteredBooks(sorted);
     setCurrentPage(1);
   };
@@ -113,7 +121,7 @@ const BooksList = () => {
       {/* Books grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {pageBooks.map((book) => (
-          <BookCard key={book.id} book={book} />
+          <BookCard key={book.isbn ?? book.id} book={book} />
         ))}
       </div>
 
