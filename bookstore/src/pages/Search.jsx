@@ -3,8 +3,6 @@ import { fetchBooks } from "../services/api";
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
 
-
-
 export default function Search() {
   const [query, setQuery] = useState("");
   const [books, setBooks] = useState([]);

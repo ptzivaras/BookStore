@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
-import CategoryFilter from "../components/CategoryFilter";
+import CategoryFilter from "../components/filters/CategoryFilter";
 import { fetchBooks } from "../services/api";
 import { useLoading } from "../context/LoadingContext";
 

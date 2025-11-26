@@ -3,7 +3,7 @@ import { fetchBooks } from "../services/api";
 
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
-import CategoryFilter from "../components/CategoryFilter";
+import CategoryFilter from "../components/filters/CategoryFilter";
 import RisingStar from "../components/RisingStar";
 import SearchBar from "../components/SearchBar";
 
