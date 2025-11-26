@@ -1,13 +1,16 @@
-//with latency, filtering, full CRUD, localStorage persistence, and in-memory caching.
+// ---------------------------------------------------------------------------
+// MOCK API — localStorage + delay + full CRUD
+// ---------------------------------------------------------------------------
+
 import seed from "../data/books.json";
 
 const LS_KEY_BOOKS = "bookstore.books";
-let memory = null; // in-memory cache only (no repeated JSON parsing)
+let memory = null;
 
 const delay = (ms = 350) => new Promise((res) => setTimeout(res, ms));
 
 // ---------------------------------------------------------------------------
-// INITIALISATION
+// INITIALIZATION
 // ---------------------------------------------------------------------------
 function seedIfEmpty() {
   if (!localStorage.getItem(LS_KEY_BOOKS)) {
@@ -18,7 +21,6 @@ function seedIfEmpty() {
 
 function loadAll() {
   if (memory) return memory;
-
   seedIfEmpty();
   memory = JSON.parse(localStorage.getItem(LS_KEY_BOOKS) || "[]");
   return memory;
@@ -30,7 +32,7 @@ function saveAll(list) {
 }
 
 // ---------------------------------------------------------------------------
-// CATEGORY UTILITIES
+// CATEGORY UTIL
 // ---------------------------------------------------------------------------
 function deriveCategory(b) {
   if (b.categories?.length) return b.categories[0];
@@ -42,10 +44,6 @@ function deriveCategory(b) {
 // ---------------------------------------------------------------------------
 // READ / SEARCH
 // ---------------------------------------------------------------------------
-
-/**
- * Fetch all books with optional filters.
- */
 export async function fetchBooks({ q = "", year, publisher, category } = {}) {
   await delay();
   const all = loadAll().map((b) => ({ ...b, category: deriveCategory(b) }));
@@ -78,14 +76,10 @@ export async function fetchBooks({ q = "", year, publisher, category } = {}) {
   return result;
 }
 
-/**
- * Read one book by ISBN.
- */
 export async function getBookByIsbn(isbn) {
   await delay();
   const all = loadAll();
   const found = all.find((b) => b.isbn === isbn);
-
   if (!found) throw new Error("Book not found");
   return found;
 }
@@ -93,13 +87,8 @@ export async function getBookByIsbn(isbn) {
 // ---------------------------------------------------------------------------
 // CREATE
 // ---------------------------------------------------------------------------
-
-/**
- * Creates a new book.
- */
 export async function createBook(data) {
-  await delay(500);
-
+  await delay(400);
   const all = loadAll();
 
   if (all.some((b) => b.isbn === data.isbn)) {
@@ -115,10 +104,6 @@ export async function createBook(data) {
 // ---------------------------------------------------------------------------
 // UPDATE
 // ---------------------------------------------------------------------------
-
-/**
- * Updates a book by ISBN.
- */
 export async function updateBook(isbn, patch) {
   await delay(400);
 
@@ -137,27 +122,25 @@ export async function updateBook(isbn, patch) {
 // ---------------------------------------------------------------------------
 // DELETE
 // ---------------------------------------------------------------------------
-
-/**
- * Deletes a book by ISBN.
- */
 export async function deleteBook(isbn) {
-  await delay(350);
-
+  await delay(300);
   const all = loadAll();
-  const before = all.length;
-
   const filtered = all.filter((b) => b.isbn !== isbn);
   saveAll(filtered);
-
-  return filtered.length !== before; // true = deleted
+  return true;
 }
 
-/**
- * Rising Star Book
- */
-export const getRisingStar = async () => {
-    const response = await api.get("/books/rising-star");
-    return response.data;
-};
+// ---------------------------------------------------------------------------
+// RISING STAR (single + list)
+// ---------------------------------------------------------------------------
+export async function getRisingStar() {
+  await delay(250);
+  const all = loadAll();
+  return all[0]; // first book is featured
+}
 
+export async function getRisingStars() {
+  await delay(250);
+  const all = loadAll();
+  return all.slice(0, 5); // top 5 featured
+}

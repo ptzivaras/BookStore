@@ -3,6 +3,7 @@ import { fetchBooks } from "../services/api";
 
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
+
 import CategoryFilter from "../components/CategoryFilter";
 import RisingStar from "../components/RisingStar";
 
@@ -31,7 +32,6 @@ export default function Home() {
     };
   }, []);
 
-  // Extract categories dynamically from publisher field
   const categories = [...new Set(books.map((b) => b.publisher))];
 
   useEffect(() => {
@@ -49,9 +49,7 @@ export default function Home() {
 
   return (
     <div className="p-5">
-      
-      {/* Rising Star Section */}
-      <RisingStar />
+      <RisingStar/>
 
       <h2 className="text-2xl font-bold mt-8 mb-4">Book List</h2>
 
