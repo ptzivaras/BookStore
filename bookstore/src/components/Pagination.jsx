@@ -1,6 +1,10 @@
-export default function Pagination({ currentPage, totalItems, pageSize, onPageChange }) {
+export default function Pagination({
+  currentPage,
+  totalItems,
+  pageSize,
+  onPageChange,
+}) {
   const totalPages = Math.ceil(totalItems / pageSize);
-
   if (totalPages <= 1) return null;
 
   return (
@@ -8,19 +12,35 @@ export default function Pagination({ currentPage, totalItems, pageSize, onPageCh
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className="px-4 py-2 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-slate-200 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-700"
+        className="
+          px-4 py-2 rounded border
+          bg-white dark:bg-slate-800
+          border-slate-300 dark:border-slate-700
+          text-slate-800 dark:text-slate-100
+          hover:bg-slate-100 dark:hover:bg-slate-700
+          disabled:opacity-50
+          transition
+        "
       >
         Previous
       </button>
 
-      <span className="font-semibold dark:text-slate-100">
-        Page {currentPage} of {totalPages}
+      <span className="font-medium text-slate-800 dark:text-slate-100">
+        Page {currentPage} / {totalPages}
       </span>
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className="px-4 py-2 rounded border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 dark:text-slate-200 disabled:opacity-40 hover:bg-slate-100 dark:hover:bg-slate-700"
+        className="
+          px-4 py-2 rounded border
+          bg-white dark:bg-slate-800
+          border-slate-300 dark:border-slate-700
+          text-slate-800 dark:text-slate-100
+          hover:bg-slate-100 dark:hover:bg-slate-700
+          disabled:opacity-50
+          transition
+        "
       >
         Next
       </button>
