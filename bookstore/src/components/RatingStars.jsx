@@ -1,13 +1,27 @@
-import { memo } from "react";
+import { useState } from "react";
 
-function RatingStars({ value = 4 }) {
+export default function RatingStars({ value = 0, onChange }) {
+  const [hover, setHover] = useState(0);
+
+  const visibleValue = hover || value;
+
   return (
-    <div className="flex gap-0.5 text-yellow-500 select-none">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <span key={i}>{i < value ? "★" : "☆"}</span>
+    <div className="flex gap-1 cursor-pointer select-none">
+      {[1, 2, 3, 4, 5].map((n) => (
+        <span
+          key={n}
+          onMouseEnter={() => setHover(n)}
+          onMouseLeave={() => setHover(0)}
+          onClick={() => onChange && onChange(n)}
+          className={
+            visibleValue >= n
+              ? "text-yellow-500 text-2xl"
+              : "text-gray-300 text-2xl"
+          }
+        >
+          ★
+        </span>
       ))}
     </div>
   );
 }
-
-export default memo(RatingStars);

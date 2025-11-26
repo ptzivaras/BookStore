@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getBookByIsbn, fetchBooks } from "../services/api";
+import { getBookByIsbn, fetchBooks, updateBookRating } from "../services/api";
 import { useLoading } from "../context/LoadingContext";
 import FavoriteButton from "../components/FavoriteButton";
+import RatingStars from "../components/RatingStars";
 
 export default function BookDetail() {
   const { isbn } = useParams();
@@ -23,19 +24,15 @@ export default function BookDetail() {
         if (!alive) return;
         setBook(data);
 
-        // ----------------------------
         // LOAD ALL BOOKS FOR RELATED
-        // ----------------------------
         const all = await fetchBooks({ q: "" });
 
         let matches = [];
 
-        // 1) same author (strongest signal)
         matches = all.filter(
           (b) => b.author === data.author && b.isbn !== data.isbn
         );
 
-        // 2) If less than 4 → add books from same derived category
         if (matches.length < 4) {
           const derived =
             data.subtitle?.split(" ")[0] || data.publisher?.split(" ")[0];
@@ -47,15 +44,12 @@ export default function BookDetail() {
                 b.publisher?.includes(derived))
           );
 
-          // merge unique
           const map = new Map();
           [...matches, ...extra].forEach((x) => map.set(x.isbn, x));
           matches = Array.from(map.values());
         }
 
-        // Limit 4
         matches = matches.slice(0, 4);
-
         if (!alive) return;
         setRelated(matches);
       } catch (err) {
@@ -70,6 +64,13 @@ export default function BookDetail() {
       alive = false;
     };
   }, [isbn]);
+
+  const handleRating = async (rating) => {
+    showLoading();
+    const updated = await updateBookRating(isbn, rating);
+    setBook(updated);
+    hideLoading();
+  };
 
   if (error) {
     return (
@@ -104,11 +105,17 @@ export default function BookDetail() {
             <h1 className="text-3xl font-bold text-gray-900">
               {book.title}
             </h1>
-            <p className="mt-2 text-gray-700 text-lg">By {book.author}</p>
-
-            <p className="mt-2 text-yellow-600 font-semibold text-lg">
-              ⭐ {book.rating} / 5
+            <p className="mt-2 text-gray-700 text-lg">
+              By {book.author}
             </p>
+
+            {/* ⭐ INTERACTIVE RATING */}
+            <div className="mt-3">
+              <RatingStars value={book.rating} onChange={handleRating} />
+              <p className="text-gray-600 text-sm mt-1">
+                {book.rating.toFixed(1)} / 5
+              </p>
+            </div>
 
             <p className="mt-4 text-gray-800 leading-relaxed">
               {book.description}
@@ -121,22 +128,21 @@ export default function BookDetail() {
               <p><strong>Category:</strong> {book.category}</p>
             </div>
 
-            {/* Action Bar */}
+            {/* Action buttons */}
             <div className="mt-6 flex items-center gap-4">
               <FavoriteButton isbn={book.isbn} />
 
               <button
+                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
                 onClick={() =>
                   navigator.clipboard.writeText(window.location.href)
                 }
-                className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
               >
                 Share
               </button>
             </div>
           </div>
 
-          {/* Bottom Buttons */}
           <div className="mt-6 flex gap-4">
             <Link
               to={`/books/edit/${isbn}`}
@@ -144,6 +150,7 @@ export default function BookDetail() {
             >
               Edit Book
             </Link>
+
             <Link
               to="/books"
               className="px-4 py-2 rounded bg-gray-200 text-gray-700 hover:bg-gray-300"
@@ -156,7 +163,9 @@ export default function BookDetail() {
 
       {/* RELATED BOOKS */}
       <div className="mt-10">
-        <h2 className="text-xl font-semibold mb-4">Other books you may like</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          Other books you may like
+        </h2>
 
         {related.length === 0 && (
           <p className="text-sm text-slate-500">No related books found.</p>

@@ -144,3 +144,18 @@ export async function getRisingStars() {
   const all = loadAll();
   return all.slice(0, 5); // top 5 featured
 }
+
+//RatingStars Feature
+export async function updateBookRating(isbn, rating) {
+  await delay(200);
+
+  const all = loadAll();
+  const index = all.findIndex((b) => b.isbn === isbn);
+
+  if (index === -1) throw new Error("Book not found");
+
+  all[index].rating = rating;
+  saveAll(all);
+
+  return all[index];
+}
