@@ -5,7 +5,7 @@ import CategoryFilter from "../components/CategoryFilter";
 import { fetchBooks } from "../services/api";
 import { useLoading } from "../context/LoadingContext";
 
-const BooksList = () => {
+export default function BooksList() {
   const [books, setBooks] = useState([]);
   const [filteredBooks, setFilteredBooks] = useState([]);
   const [sortOption, setSortOption] = useState("");
@@ -13,9 +13,9 @@ const BooksList = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const { showLoading, hideLoading } = useLoading();
-
   const pageSize = 6;
 
+  // Load all books
   useEffect(() => {
     const loadBooks = async () => {
       try {
@@ -27,14 +27,13 @@ const BooksList = () => {
         hideLoading();
       }
     };
-
     loadBooks();
   }, []);
 
-  // Extract all categories dynamically
+  // Extract categories dynamically
   const categories = [...new Set(books.map((b) => b.category))];
 
-  // Apply Sorting
+  // Apply sorting
   const applySorting = (list, option) => {
     const sorted = [...list];
 
@@ -49,14 +48,18 @@ const BooksList = () => {
         sorted.sort((a, b) => b.rating - a.rating);
         break;
       case "year":
-        sorted.sort((a, b) => b.year - a.year);
+        sorted.sort(
+          (a, b) =>
+            new Date(b.published).getFullYear() -
+            new Date(a.published).getFullYear()
+        );
         break;
     }
 
     return sorted;
   };
 
-  // Category filter
+  // Category filtering
   const handleCategoryChange = (value) => {
     setCategory(value);
 
@@ -66,6 +69,7 @@ const BooksList = () => {
       updated = updated.filter((b) => b.category === value);
     }
 
+    // Apply sorting after filtering
     if (sortOption) {
       updated = applySorting(updated, sortOption);
     }
@@ -74,44 +78,50 @@ const BooksList = () => {
     setCurrentPage(1);
   };
 
-  // Sorting dropdown selection
+  // Handle sorting
   const handleSort = (option) => {
     setSortOption(option);
-    const sorted = applySorting(filteredBooks, option);
+
+    let sorted = applySorting(filteredBooks, option);
     setFilteredBooks(sorted);
     setCurrentPage(1);
   };
 
-  // Pagination logic
+  // Pagination
   const indexOfLast = currentPage * pageSize;
   const indexOfFirst = indexOfLast - pageSize;
   const pageBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
 
   return (
-    <div className="container mx-auto px-4 py-6">
-      {/* Title */}
-      <h1 className="text-2xl font-bold mb-6 dark:text-slate-100">
-        Books List
+    <div className="max-w-6xl mx-auto px-4 py-6">
+
+      <h1 className="text-3xl font-bold mb-6 dark:text-slate-100">
+        Books Library
       </h1>
 
-      {/* Top Tools: Filters + Sorting */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-        {/* Category Filter */}
-        <CategoryFilter
-          categories={categories}
-          selected={category}
-          onChange={handleCategoryChange}
-        />
+      {/* Filter + Sort Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
 
-        {/* Sort Menu */}
+        {/* Category Selector */}
+        <div className="w-full sm:w-auto">
+          <CategoryFilter
+            categories={categories}
+            selected={category}
+            onChange={handleCategoryChange}
+          />
+        </div>
+
+        {/* Sort Selector */}
         <select
           value={sortOption}
           onChange={(e) => handleSort(e.target.value)}
           className="
-            border border-slate-300 dark:border-slate-700
-            rounded px-3 py-2 text-sm
-            bg-white dark:bg-slate-800 dark:text-slate-100
-            shadow-sm
+            px-3 py-2 rounded border 
+            bg-white text-slate-900
+            border-slate-300 
+            dark:bg-slate-800 dark:text-slate-100 dark:border-slate-600
+            hover:bg-gray-100 dark:hover:bg-slate-700
+            transition
           "
         >
           <option value="">Sort by…</option>
@@ -122,27 +132,26 @@ const BooksList = () => {
         </select>
       </div>
 
-      {/* Books Grid */}
-      <div
-        className="
-          grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
-          gap-6
-        "
-      >
-        {pageBooks.map((book) => (
-          <BookCard key={book.id ?? book.isbn} book={book} />
-        ))}
-      </div>
+      {/* Book Grid */}
+      {pageBooks.length === 0 ? (
+        <p className="text-slate-600 dark:text-slate-300">
+          No books match the selected filters.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pageBooks.map((book) => (
+            <BookCard key={book.isbn} book={book} />
+          ))}
+        </div>
+      )}
 
       {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalItems={filteredBooks.length}
         pageSize={pageSize}
-        onPageChange={(page) => setCurrentPage(page)}
+        onPageChange={(p) => setCurrentPage(p)}
       />
     </div>
   );
-};
-
-export default BooksList;
+}
