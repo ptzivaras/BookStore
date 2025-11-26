@@ -95,7 +95,7 @@ const BooksList = () => {
 
   return (
     <div className="container mx-auto px-4 py-6">
-      <h1 className="text-2xl font-bold mb-4">Books List</h1>
+      <h1 className="text-2xl font-bold mb-4 dark:text-slate-100">Books List</h1>
 
       {/* Filters area */}
       <div className="flex items-center gap-4 mb-4">
@@ -108,7 +108,7 @@ const BooksList = () => {
         <select
           value={sortOption}
           onChange={(e) => handleSort(e.target.value)}
-          className="border px-3 py-2 rounded"
+          className="border border-slate-300 dark:border-slate-600 px-3 py-2 rounded bg-white dark:bg-slate-800 dark:text-slate-100"
         >
           <option value="">Sort by...</option>
           <option value="title">Title (A-Z)</option>

@@ -45,8 +45,8 @@ export default function BookDetail() {
   if (error) {
     return (
       <div className="p-6 text-center">
-        <p className="text-red-600 font-semibold">{error}</p>
-        <Link to="/books" className="inline-block mt-4 text-blue-600">
+        <p className="text-red-600 dark:text-red-400 font-semibold">{error}</p>
+        <Link to="/books" className="inline-block mt-4 text-blue-600 dark:text-blue-400">
           Back to Books
         </Link>
       </div>
@@ -62,7 +62,7 @@ export default function BookDetail() {
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl p-6 flex gap-8">
+      <div className="bg-white dark:bg-slate-800 shadow-lg dark:shadow-none rounded-xl p-6 flex gap-8 border border-transparent dark:border-slate-700">
         
         <img
           src={cover}
@@ -72,7 +72,7 @@ export default function BookDetail() {
 
         <div className="flex flex-col justify-between flex-1">
           <div>
-            <h1 className="text-3xl font-bold">{book.title}</h1>
+            <h1 className="text-3xl font-bold dark:text-slate-100">{book.title}</h1>
             <p className="mt-2 text-gray-700 dark:text-gray-300 text-lg">
               By {book.author}
             </p>

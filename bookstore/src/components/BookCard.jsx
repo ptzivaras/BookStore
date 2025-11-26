@@ -10,14 +10,14 @@ export default function BookCard({ book }) {
       : `https://picsum.photos/seed/${book.isbn}/300/400`;
 
   return (
-    <div className="card bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 p-4 rounded-lg shadow">
+    <div className="card bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 p-4 rounded-lg shadow dark:shadow-none">
       <img
         src={cover}
         alt={book.title}
         className="w-full h-48 object-cover rounded-md mb-3"
       />
 
-      <h3 className="font-semibold text-lg leading-tight">{book.title}</h3>
+      <h3 className="font-semibold text-lg leading-tight dark:text-slate-100">{book.title}</h3>
 
       <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
         {book.author}

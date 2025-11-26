@@ -76,11 +76,11 @@ export default function AddBook() {
 
   return (
     <form onSubmit={onSubmit} className="max-w-2xl space-y-4">
-      <h1 className="text-2xl font-semibold">Add new Book</h1>
+      <h1 className="text-2xl font-semibold dark:text-slate-100">Add new Book</h1>
 
-      {errors.form && <p className="text-red-600 text-sm">{errors.form}</p>}
+      {errors.form && <p className="text-red-600 dark:text-red-400 text-sm">{errors.form}</p>}
       {status === "success" && (
-        <p className="text-green-700 text-sm">Book created successfully.</p>
+        <p className="text-green-700 dark:text-green-400 text-sm">Book created successfully.</p>
       )}
 
       <div>

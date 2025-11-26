@@ -79,11 +79,11 @@ export default function EditBook() {
   }
 
   if (notFound)
-    return <p className="p-6 text-slate-600">Book not found.</p>;
+    return <p className="p-6 text-slate-600 dark:text-slate-400">Book not found.</p>;
 
   return (
     <div className="max-w-2xl">
-      <h2 className="text-2xl font-semibold mb-4">Edit Book</h2>
+      <h2 className="text-2xl font-semibold mb-4 dark:text-slate-100">Edit Book</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="label">Title</label>
