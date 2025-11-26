@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getBookByIsbn } from "../services/api";
+import { getBookByIsbn, updateBookRating } from "../services/api";
 import { useLoading } from "../context/LoadingContext";
+import RatingStars from "../components/RatingStars";
 import FavoriteButton from "../components/FavoriteButton";
 
 export default function BookDetail() {
@@ -17,24 +18,27 @@ export default function BookDetail() {
         showLoading();
         const data = await getBookByIsbn(isbn);
         setBook(data);
-      } catch (err) {
+      } catch {
         setError("Book not found.");
       } finally {
         hideLoading();
       }
     };
-
     load();
   }, [isbn]);
+
+  const handleRating = async (rating) => {
+    showLoading();
+    const updated = await updateBookRating(isbn, rating);
+    setBook(updated);
+    hideLoading();
+  };
 
   if (error) {
     return (
       <div className="p-6 text-center">
         <p className="text-red-600 font-semibold">{error}</p>
-        <Link
-          to="/books"
-          className="inline-block mt-4 text-blue-600 hover:underline"
-        >
+        <Link to="/books" className="inline-block mt-4 text-blue-600">
           Back to Books
         </Link>
       </div>
@@ -43,35 +47,30 @@ export default function BookDetail() {
 
   if (!book) return null;
 
-  const cover = book.cover || `https://picsum.photos/seed/${book.isbn}/600/800`;
+  const cover =
+    book.cover && book.cover.trim() !== ""
+      ? book.cover
+      : `https://picsum.photos/seed/${book.isbn}/600/800`;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="bg-white shadow-lg rounded-xl p-6 flex gap-8">
-        {/* Cover */}
         <img
           src={cover}
           alt={book.title}
           className="w-60 h-80 rounded-lg object-cover shadow-md"
         />
 
-        {/* Content */}
         <div className="flex flex-col justify-between flex-1">
           <div>
-            <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-bold text-gray-900">
-                {book.title}
-              </h1>
-
-              {/* ⭐ FAVORITE BUTTON RESTORED */}
-              <FavoriteButton isbn={book.isbn} />
-            </div>
-
+            <h1 className="text-3xl font-bold">{book.title}</h1>
             <p className="mt-2 text-gray-700 text-lg">By {book.author}</p>
 
-            <p className="mt-2 text-yellow-600 font-semibold text-lg">
-              ⭐ {book.rating} / 5
-            </p>
+            <div className="mt-3">
+              <RatingStars value={book.rating} onChange={handleRating} />
+            </div>
+
+            <FavoriteButton isbn={book.isbn} className="mt-3" />
 
             <p className="mt-4 text-gray-800 leading-relaxed">
               {book.description}
@@ -79,7 +78,10 @@ export default function BookDetail() {
 
             <div className="mt-4 text-sm text-gray-600">
               <p><strong>Publisher:</strong> {book.publisher}</p>
-              <p><strong>Year:</strong> {new Date(book.published).getFullYear()}</p>
+              <p>
+                <strong>Year:</strong>{" "}
+                {new Date(book.published).getFullYear()}
+              </p>
               <p><strong>Pages:</strong> {book.pages}</p>
               <p><strong>Category:</strong> {book.category}</p>
             </div>

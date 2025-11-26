@@ -15,32 +15,27 @@ export default function RisingStar() {
         showLoading();
         const data = await getRisingStars();
         if (!alive) return;
-
-        if (Array.isArray(data)) {
-          setStars(data);
-        }
+        setStars(Array.isArray(data) ? data : []);
       } finally {
         hideLoading();
       }
     };
 
     load();
-    return () => {
-      alive = false;
-    };
+    return () => (alive = false);
   }, []);
 
   if (stars.length === 0) return null;
 
-  const next = () => {
-    setIndex((prev) => (prev + 1) % stars.length);
-  };
-
-  const prev = () => {
-    setIndex((prev) => (prev - 1 + stars.length) % stars.length);
-  };
+  const next = () => setIndex((i) => (i + 1) % stars.length);
+  const prev = () => setIndex((i) => (i - 1 + stars.length) % stars.length);
 
   const book = stars[index];
+
+  const cover =
+    book.cover && book.cover.trim() !== ""
+      ? book.cover
+      : `https://picsum.photos/seed/${book.isbn}/300/400`;
 
   return (
     <div className="w-full bg-white shadow rounded-lg p-6 mb-8">
@@ -49,7 +44,6 @@ export default function RisingStar() {
       </h2>
 
       <div className="flex items-center justify-center gap-6 relative">
-        {/* Prev */}
         <button
           onClick={prev}
           className="absolute left-0 bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-full"
@@ -57,10 +51,9 @@ export default function RisingStar() {
           ◀
         </button>
 
-        {/* Card */}
         <div className="text-center w-64">
           <img
-            src={book.cover || "/placeholder.jpg"}
+            src={cover}
             alt={book.title}
             className="w-40 h-56 mx-auto object-cover rounded shadow"
           />
@@ -68,10 +61,8 @@ export default function RisingStar() {
           <h3 className="mt-3 text-lg font-semibold">{book.title}</h3>
           <p className="text-gray-600">By {book.author}</p>
           <p className="text-yellow-600 font-bold mt-1">⭐ {book.rating}</p>
-          <p className="text-sm mt-2 text-gray-700">{book.description}</p>
         </div>
 
-        {/* Next */}
         <button
           onClick={next}
           className="absolute right-0 bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-2 rounded-full"
@@ -80,7 +71,6 @@ export default function RisingStar() {
         </button>
       </div>
 
-      {/* Dots */}
       <div className="flex justify-center mt-4 gap-2">
         {stars.map((_, i) => (
           <div
