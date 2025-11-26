@@ -1,24 +1,11 @@
-import React from "react";
-
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-
-  const handlePrev = () => {
-    if (currentPage > 1) {
-      onPageChange(currentPage - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentPage < totalPages) {
-      onPageChange(currentPage + 1);
-    }
-  };
+  if (totalPages <= 1) return null;
 
   return (
     <div className="flex justify-center items-center mt-6 space-x-4">
       <button
-        onClick={handlePrev}
-        className="px-4 py-2 border rounded disabled:opacity-50"
+        onClick={() => onPageChange(currentPage - 1)}
+        className="px-4 py-2 border rounded disabled:opacity-50 hover:bg-gray-100"
         disabled={currentPage === 1}
       >
         Previous
@@ -29,8 +16,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       </span>
 
       <button
-        onClick={handleNext}
-        className="px-4 py-2 border rounded disabled:opacity-50"
+        onClick={() => onPageChange(currentPage + 1)}
+        className="px-4 py-2 border rounded disabled:opacity-50 hover:bg-gray-100"
         disabled={currentPage === totalPages}
       >
         Next

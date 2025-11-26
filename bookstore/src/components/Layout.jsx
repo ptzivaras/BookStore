@@ -1,45 +1,26 @@
-import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { Outlet, Link } from "react-router-dom";
 
-/**
- * Layout
- * - Header nav (NavLink to keep active state)
- * - Main content via <Outlet />
- * - Footer
- */
 export default function Layout() {
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
-      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur border-b border-slate-200">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
-          <NavLink to="/" className="text-2xl font-bold">
-            Bookstore
-          </NavLink>
+    <div className="min-h-screen bg-gray-50 text-gray-900">
+      <header className="bg-white shadow-sm">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <Link to="/" className="text-2xl font-bold text-indigo-600">
+            BookStore
+          </Link>
 
-          <nav className="flex gap-4 text-sm">
-            <NavLink to="/" end className={({ isActive }) => (isActive ? "font-semibold" : "")}>
-              Home
-            </NavLink>
-            <NavLink to="/search" className={({ isActive }) => (isActive ? "font-semibold" : "")}>
-              Search
-            </NavLink>
-            <NavLink to="/add" className={({ isActive }) => (isActive ? "font-semibold" : "")}>
-              Add Book
-            </NavLink>
-            <NavLink to="/favorites" className={({ isActive }) => (isActive ? "font-semibold" : "")}>
-              Favorites
-            </NavLink>
+          <nav className="flex gap-6 text-sm">
+            <Link to="/books" className="hover:text-indigo-600">Books</Link>
+            <Link to="/favorites" className="hover:text-indigo-600">Favorites</Link>
+            <Link to="/add" className="hover:text-indigo-600">Add Book</Link>
+            <Link to="/search" className="hover:text-indigo-600">Search</Link>
           </nav>
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl px-4 py-8 grow">
+      <main className="container mx-auto px-6 py-8">
         <Outlet />
       </main>
-
-      <footer className="border-t border-slate-200 py-6 text-center text-sm text-slate-500">
-        © {new Date().getFullYear()} Bookstore
-      </footer>
     </div>
   );
 }

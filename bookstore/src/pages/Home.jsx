@@ -17,9 +17,7 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 6;
 
-  // ---------------------------------
   // Load books (with search)
-  // ---------------------------------
   useEffect(() => {
     let alive = true;
 
@@ -27,7 +25,6 @@ export default function Home() {
       try {
         const data = await fetchBooks({ q: searchQuery });
         if (!alive) return;
-
         setBooks(data);
       } catch (err) {
         console.error("Failed to load books", err);
@@ -39,40 +36,28 @@ export default function Home() {
     };
   }, [searchQuery]);
 
-  // ---------------------------------
-  // Dynamic categories
-  // ---------------------------------
   const categories = [...new Set(books.map((b) => b.publisher))];
 
-  // ---------------------------------
-  // Category filter
-  // ---------------------------------
   useEffect(() => {
     if (category === "all") {
       setFilteredBooks(books);
     } else {
       setFilteredBooks(books.filter((b) => b.publisher === category));
     }
-
     setCurrentPage(1);
   }, [category, books]);
 
-  // ---------------------------------
-  // Pagination
-  // ---------------------------------
   const indexOfLast = currentPage * booksPerPage;
   const indexOfFirst = indexOfLast - booksPerPage;
   const currentBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
 
   return (
-    <div className="p-5">
-      {/* Rising Star Carousel */}
+    <div className="px-6">
       <RisingStar />
 
-      {/* SearchBar RESTORED */}
       <SearchBar onSearch={(q) => setSearchQuery(q)} />
 
-      <h2 className="text-2xl font-bold mt-4 mb-3">Book List</h2>
+      <h2 className="text-2xl font-bold mt-6 mb-4">Book List</h2>
 
       <CategoryFilter
         categories={categories}
@@ -80,7 +65,7 @@ export default function Home() {
         onChange={setCategory}
       />
 
-      <div className="grid grid-cols-3 gap-5 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
         {currentBooks.map((book) => (
           <BookCard key={book.isbn} book={book} />
         ))}
@@ -89,7 +74,7 @@ export default function Home() {
       <Pagination
         currentPage={currentPage}
         totalPages={Math.ceil(filteredBooks.length / booksPerPage)}
-        onPageChange={(page) => setCurrentPage(page)}
+        onPageChange={(p) => setCurrentPage(p)}
       />
     </div>
   );
