@@ -1,34 +1,34 @@
-import React from "react";
-import mockData from "../data/books.json";
-import BookCard from "../components/BookCard";
 import { useFavorites } from "../context/FavoritesContext";
+import BookCard from "../components/BookCard";
 
-/**
- * Favorites page
- * - Uses same BookCard component
- * - Loads mockData.books (keeps compatibility with your JSON structure)
- */
 export default function Favorites() {
   const { favorites } = useFavorites();
 
-  const allBooks = Array.isArray(mockData)
-    ? mockData
-    : mockData?.books ?? [];
-
-  const favBooks = allBooks.filter((b) => favorites.includes(b.isbn));
-
-  if (favBooks.length === 0) {
-    return <p className="mt-6 text-slate-600">No favorite books yet.</p>;
-  }
-
   return (
-    <div>
-      <h1 className="text-2xl font-semibold mb-4">Your Favorites</h1>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {favBooks.map((book) => (
+    <div className="max-w-6xl mx-auto px-4 py-6">
+
+      <h1 className="text-3xl font-bold mb-6 text-slate-800 dark:text-slate-100">
+        Your Favorite Books
+      </h1>
+
+      {/* Empty state */}
+      {favorites.length === 0 && (
+        <div className="
+          p-6 rounded-xl border border-slate-300 dark:border-slate-700
+          bg-slate-100 dark:bg-slate-800
+          text-center text-slate-600 dark:text-slate-300
+        ">
+          You haven’t added any favorites yet.
+        </div>
+      )}
+
+      {/* Favorites Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        {favorites.map((book) => (
           <BookCard key={book.isbn} book={book} />
         ))}
       </div>
+
     </div>
   );
 }
