@@ -17,29 +17,33 @@ import Search from "./pages/Search";
 
 import "./styles.css";
 
+import { ToastProvider } from "./context/ToastContext";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <LoadingProvider>
-      <FavoritesProvider>
-        <BrowserRouter>
+    <ToastProvider>
+      <LoadingProvider>
+        <FavoritesProvider>
+          <BrowserRouter>
 
-          {/* Global spinner */}
-          <LoadingOverlay />
+            {/* Global spinner */}
+            <LoadingOverlay />
 
-          <Routes>
-            <Route path="/" element={<Layout />}>
-              <Route index element={<Home />} />
-              <Route path="books" element={<BooksList />} />
-              <Route path="book/:isbn" element={<BookDetail />} />
-              <Route path="add" element={<AddBook />} />
-              <Route path="edit/:isbn" element={<EditBook />} />
-              <Route path="favorites" element={<Favorites />} />
-              <Route path="search" element={<Search />} />
-            </Route>
-          </Routes>
+            <Routes>
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="books" element={<BooksList />} />
+                <Route path="book/:isbn" element={<BookDetail />} />
+                <Route path="add" element={<AddBook />} />
+                <Route path="edit/:isbn" element={<EditBook />} />
+                <Route path="favorites" element={<Favorites />} />
+                <Route path="search" element={<Search />} />
+              </Route>
+            </Routes>
 
-        </BrowserRouter>
-      </FavoritesProvider>
-    </LoadingProvider>
+          </BrowserRouter>
+        </FavoritesProvider>
+      </LoadingProvider>
+    </ToastProvider>
   </React.StrictMode>
 );
