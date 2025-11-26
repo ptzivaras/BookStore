@@ -3,55 +3,76 @@ import { fetchBooks } from "../services/api";
 
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
-
 import CategoryFilter from "../components/CategoryFilter";
 import RisingStar from "../components/RisingStar";
+import SearchBar from "../components/SearchBar";
 
 export default function Home() {
   const [books, setBooks] = useState([]);
-  const [category, setCategory] = useState("all");
   const [filteredBooks, setFilteredBooks] = useState([]);
+
+  const [category, setCategory] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 6;
 
+  // ---------------------------------
+  // Load books (with search)
+  // ---------------------------------
   useEffect(() => {
     let alive = true;
+
     (async () => {
       try {
-        const data = await fetchBooks();
+        const data = await fetchBooks({ q: searchQuery });
         if (!alive) return;
+
         setBooks(data);
-        setFilteredBooks(data);
       } catch (err) {
         console.error("Failed to load books", err);
       }
     })();
+
     return () => {
       alive = false;
     };
-  }, []);
+  }, [searchQuery]);
 
+  // ---------------------------------
+  // Dynamic categories
+  // ---------------------------------
   const categories = [...new Set(books.map((b) => b.publisher))];
 
+  // ---------------------------------
+  // Category filter
+  // ---------------------------------
   useEffect(() => {
     if (category === "all") {
       setFilteredBooks(books);
     } else {
       setFilteredBooks(books.filter((b) => b.publisher === category));
     }
+
     setCurrentPage(1);
   }, [category, books]);
 
+  // ---------------------------------
+  // Pagination
+  // ---------------------------------
   const indexOfLast = currentPage * booksPerPage;
   const indexOfFirst = indexOfLast - booksPerPage;
   const currentBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
 
   return (
     <div className="p-5">
-      <RisingStar/>
+      {/* Rising Star Carousel */}
+      <RisingStar />
 
-      <h2 className="text-2xl font-bold mt-8 mb-4">Book List</h2>
+      {/* SearchBar RESTORED */}
+      <SearchBar onSearch={(q) => setSearchQuery(q)} />
+
+      <h2 className="text-2xl font-bold mt-4 mb-3">Book List</h2>
 
       <CategoryFilter
         categories={categories}
