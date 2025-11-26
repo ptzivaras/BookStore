@@ -5,96 +5,113 @@ import CategoryFilter from "../components/CategoryFilter";
 import { fetchBooks } from "../services/api";
 import { useLoading } from "../context/LoadingContext";
 
-export default function BooksList() {
+const BooksList = () => {
   const [books, setBooks] = useState([]);
-  const [filtered, setFiltered] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
   const [sortOption, setSortOption] = useState("");
   const [category, setCategory] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
   const { showLoading, hideLoading } = useLoading();
+
   const pageSize = 6;
 
-  // Load books
   useEffect(() => {
-    const load = async () => {
+    const loadBooks = async () => {
       try {
         showLoading();
         const data = await fetchBooks();
         setBooks(data);
-        setFiltered(data);
+        setFilteredBooks(data);
       } finally {
         hideLoading();
       }
     };
-    load();
+
+    loadBooks();
   }, []);
 
-  // Dynamic categories
+  // Extract all categories dynamically
   const categories = [...new Set(books.map((b) => b.category))];
 
-  // Apply category + sort
-  useEffect(() => {
-    let result = [...books];
+  // Apply Sorting
+  const applySorting = (list, option) => {
+    const sorted = [...list];
 
-    if (category) {
-      result = result.filter((b) => b.category === category);
-    }
-
-    switch (sortOption) {
+    switch (option) {
       case "title":
-        result.sort((a, b) => a.title.localeCompare(b.title));
+        sorted.sort((a, b) => a.title.localeCompare(b.title));
         break;
       case "author":
-        result.sort((a, b) => a.author.localeCompare(b.author));
+        sorted.sort((a, b) => a.author.localeCompare(b.author));
         break;
       case "rating":
-        result.sort((a, b) => b.rating - a.rating);
+        sorted.sort((a, b) => b.rating - a.rating);
         break;
       case "year":
-        result.sort(
-          (a, b) =>
-            new Date(b.published).getFullYear() -
-            new Date(a.published).getFullYear()
-        );
+        sorted.sort((a, b) => b.year - a.year);
         break;
     }
 
-    setFiltered(result);
-    setCurrentPage(1);
-  }, [category, sortOption, books]);
+    return sorted;
+  };
 
-  // Pagination
+  // Category filter
+  const handleCategoryChange = (value) => {
+    setCategory(value);
+
+    let updated = [...books];
+
+    if (value) {
+      updated = updated.filter((b) => b.category === value);
+    }
+
+    if (sortOption) {
+      updated = applySorting(updated, sortOption);
+    }
+
+    setFilteredBooks(updated);
+    setCurrentPage(1);
+  };
+
+  // Sorting dropdown selection
+  const handleSort = (option) => {
+    setSortOption(option);
+    const sorted = applySorting(filteredBooks, option);
+    setFilteredBooks(sorted);
+    setCurrentPage(1);
+  };
+
+  // Pagination logic
   const indexOfLast = currentPage * pageSize;
   const indexOfFirst = indexOfLast - pageSize;
-  const pageBooks = filtered.slice(indexOfFirst, indexOfLast);
+  const pageBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
-
-      <h1 className="text-3xl font-bold mb-6 dark:text-slate-100">
-        Browse Books
+    <div className="container mx-auto px-4 py-6">
+      {/* Title */}
+      <h1 className="text-2xl font-bold mb-6 dark:text-slate-100">
+        Books List
       </h1>
 
-      {/* Toolbar */}
+      {/* Top Tools: Filters + Sorting */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6">
-
-        {/* Category Dropdown */}
+        {/* Category Filter */}
         <CategoryFilter
           categories={categories}
           selected={category}
-          onChange={setCategory}
+          onChange={handleCategoryChange}
         />
 
-        {/* Sort Dropdown */}
+        {/* Sort Menu */}
         <select
           value={sortOption}
-          onChange={(e) => setSortOption(e.target.value)}
+          onChange={(e) => handleSort(e.target.value)}
           className="
-            border px-3 py-2 rounded
-            bg-white dark:bg-slate-800
-            border-slate-300 dark:border-slate-700
-            text-slate-800 dark:text-slate-100
+            border border-slate-300 dark:border-slate-700
+            rounded px-3 py-2 text-sm
+            bg-white dark:bg-slate-800 dark:text-slate-100
+            shadow-sm
           "
         >
           <option value="">Sort by…</option>
@@ -105,27 +122,27 @@ export default function BooksList() {
         </select>
       </div>
 
-      {/* Empty State */}
-      {filtered.length === 0 && (
-        <p className="text-slate-500 dark:text-slate-300">
-          No books match your filters.
-        </p>
-      )}
-
       {/* Books Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div
+        className="
+          grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+          gap-6
+        "
+      >
         {pageBooks.map((book) => (
-          <BookCard key={book.isbn} book={book} />
+          <BookCard key={book.id ?? book.isbn} book={book} />
         ))}
       </div>
 
       {/* Pagination */}
       <Pagination
         currentPage={currentPage}
-        totalItems={filtered.length}
+        totalItems={filteredBooks.length}
         pageSize={pageSize}
-        onPageChange={(p) => setCurrentPage(p)}
+        onPageChange={(page) => setCurrentPage(page)}
       />
     </div>
   );
-}
+};
+
+export default BooksList;
