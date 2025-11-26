@@ -5,6 +5,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import { LoadingProvider } from "./context/LoadingContext";
+import { ToastProvider } from "./context/ToastContext";
+import { DarkModeProvider } from "./context/DarkModeContext";
+
 import LoadingOverlay from "./components/LoadingOverlay";
 
 import Home from "./pages/Home";
@@ -17,33 +20,32 @@ import Search from "./pages/Search";
 
 import "./styles.css";
 
-import { ToastProvider } from "./context/ToastContext";
-
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ToastProvider>
-      <LoadingProvider>
-        <FavoritesProvider>
-          <BrowserRouter>
+    <BrowserRouter>
+      <DarkModeProvider>
+        <LoadingProvider>
+          <ToastProvider>
+            <FavoritesProvider>
+              
+              <LoadingOverlay />
 
-            {/* Global spinner */}
-            <LoadingOverlay />
+              <Routes>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="books" element={<BooksList />} />
+                  <Route path="book/:isbn" element={<BookDetail />} />
+                  <Route path="add" element={<AddBook />} />
+                  <Route path="edit/:isbn" element={<EditBook />} />
+                  <Route path="favorites" element={<Favorites />} />
+                  <Route path="search" element={<Search />} />
+                </Route>
+              </Routes>
 
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="books" element={<BooksList />} />
-                <Route path="book/:isbn" element={<BookDetail />} />
-                <Route path="add" element={<AddBook />} />
-                <Route path="edit/:isbn" element={<EditBook />} />
-                <Route path="favorites" element={<Favorites />} />
-                <Route path="search" element={<Search />} />
-              </Route>
-            </Routes>
-
-          </BrowserRouter>
-        </FavoritesProvider>
-      </LoadingProvider>
-    </ToastProvider>
+            </FavoritesProvider>
+          </ToastProvider>
+        </LoadingProvider>
+      </DarkModeProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );

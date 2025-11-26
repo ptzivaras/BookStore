@@ -1,12 +1,17 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { useDarkMode } from "../context/DarkModeContext";
 
 export default function Layout() {
+  const { dark, setDark } = useDarkMode();
+
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900">
+    <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-gray-900 text-slate-900 dark:text-gray-100 transition">
+      
       {/* Header */}
-      <header className="sticky top-0 z-20 bg-white/80 backdrop-blur border-b border-slate-200">
+      <header className="sticky top-0 z-20 bg-white/80 dark:bg-gray-800/80 backdrop-blur border-b border-slate-200 dark:border-gray-700">
         <div className="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
+          
           <NavLink to="/" className="text-2xl font-bold tracking-tight">
             Bookstore
           </NavLink>
@@ -16,7 +21,9 @@ export default function Layout() {
               to="/"
               end
               className={({ isActive }) =>
-                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+                isActive
+                  ? "font-semibold text-indigo-600"
+                  : "text-slate-700 dark:text-gray-300"
               }
             >
               Home
@@ -25,7 +32,9 @@ export default function Layout() {
             <NavLink
               to="/books"
               className={({ isActive }) =>
-                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+                isActive
+                  ? "font-semibold text-indigo-600"
+                  : "text-slate-700 dark:text-gray-300"
               }
             >
               Books
@@ -34,7 +43,9 @@ export default function Layout() {
             <NavLink
               to="/search"
               className={({ isActive }) =>
-                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+                isActive
+                  ? "font-semibold text-indigo-600"
+                  : "text-slate-700 dark:text-gray-300"
               }
             >
               Search
@@ -43,7 +54,9 @@ export default function Layout() {
             <NavLink
               to="/add"
               className={({ isActive }) =>
-                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+                isActive
+                  ? "font-semibold text-indigo-600"
+                  : "text-slate-700 dark:text-gray-300"
               }
             >
               Add Book
@@ -52,12 +65,22 @@ export default function Layout() {
             <NavLink
               to="/favorites"
               className={({ isActive }) =>
-                isActive ? "font-semibold text-indigo-600" : "text-slate-700"
+                isActive
+                  ? "font-semibold text-indigo-600"
+                  : "text-slate-700 dark:text-gray-300"
               }
             >
               Favorites
             </NavLink>
           </nav>
+
+          {/* Dark mode toggle */}
+          <button
+            onClick={() => setDark((v) => !v)}
+            className="px-3 py-1 rounded border dark:border-gray-600 text-sm"
+          >
+            {dark ? "☀️ Light" : "🌙 Dark"}
+          </button>
         </div>
       </header>
 
@@ -66,31 +89,23 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      {/* Footer (polished) */}
-      <footer className="border-t border-slate-200">
-        <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-500">
-          <p>
-            © {new Date().getFullYear()} Bookstore. All rights reserved.
-          </p>
+      {/* Footer */}
+      <footer className="border-t border-slate-200 dark:border-gray-700">
+        <div className="mx-auto max-w-6xl px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-sm text-slate-500 dark:text-gray-400">
+          <p>© {new Date().getFullYear()} Bookstore. All rights reserved.</p>
 
           <div className="flex gap-3">
-            <NavLink
-              to="/books"
-              className="hover:text-slate-700 transition-colors"
-            >
+            <NavLink to="/books" className="hover:text-slate-700 dark:hover:text-gray-200">
               Browse books
             </NavLink>
-            <NavLink
-              to="/favorites"
-              className="hover:text-slate-700 transition-colors"
-            >
+            <NavLink to="/favorites" className="hover:text-slate-700 dark:hover:text-gray-200">
               Favorites
             </NavLink>
             <a
               href="https://github.com/ptzivaras/BookStore"
               target="_blank"
               rel="noreferrer"
-              className="hover:text-slate-700 transition-colors"
+              className="hover:text-slate-700 dark:hover:text-gray-200"
             >
               GitHub
             </a>

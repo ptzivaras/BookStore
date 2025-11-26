@@ -10,7 +10,7 @@ export default function BookCard({ book }) {
       : `https://picsum.photos/seed/${book.isbn}/300/400`;
 
   return (
-    <div className="card">
+    <div className="card bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 p-4 rounded-lg shadow">
       <img
         src={cover}
         alt={book.title}
@@ -19,7 +19,7 @@ export default function BookCard({ book }) {
 
       <h3 className="font-semibold text-lg leading-tight">{book.title}</h3>
 
-      <p className="text-sm text-gray-600 mt-1">
+      <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
         {book.author}
       </p>
 
