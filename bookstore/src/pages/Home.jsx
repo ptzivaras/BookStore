@@ -17,47 +17,38 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 6;
 
-  // Load books (with search)
+  // Fetch books
   useEffect(() => {
     let alive = true;
 
     (async () => {
-      try {
-        const data = await fetchBooks({ q: searchQuery });
-        if (!alive) return;
-        setBooks(data);
-      } catch (err) {
-        console.error("Failed to load books", err);
-      }
+      const data = await fetchBooks({ q: searchQuery });
+      if (!alive) return;
+      setBooks(data);
     })();
 
-    return () => {
-      alive = false;
-    };
+    return () => (alive = false);
   }, [searchQuery]);
 
   const categories = [...new Set(books.map((b) => b.publisher))];
 
   useEffect(() => {
-    if (category === "all") {
-      setFilteredBooks(books);
-    } else {
-      setFilteredBooks(books.filter((b) => b.publisher === category));
-    }
+    if (category === "all") setFilteredBooks(books);
+    else setFilteredBooks(books.filter((b) => b.publisher === category));
+
     setCurrentPage(1);
   }, [category, books]);
 
   const indexOfLast = currentPage * booksPerPage;
-  const indexOfFirst = indexOfLast - booksPerPage;
-  const currentBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
+  const currentBooks = filteredBooks.slice(indexOfLast - booksPerPage, indexOfLast);
 
   return (
-    <div className="px-6">
+    <div className="container-default py-6">
       <RisingStar />
 
-      <SearchBar onSearch={(q) => setSearchQuery(q)} />
+      <SearchBar onSearch={setSearchQuery} />
 
-      <h2 className="text-2xl font-bold mt-6 mb-4">Book List</h2>
+      <h2 className="section-title">Book List</h2>
 
       <CategoryFilter
         categories={categories}
@@ -74,7 +65,7 @@ export default function Home() {
       <Pagination
         currentPage={currentPage}
         totalPages={Math.ceil(filteredBooks.length / booksPerPage)}
-        onPageChange={(p) => setCurrentPage(p)}
+        onPageChange={setCurrentPage}
       />
     </div>
   );
