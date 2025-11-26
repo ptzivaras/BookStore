@@ -18,9 +18,32 @@ api.js now includes
 -Book categories system (Done)
 
 27/21 TodoList
--Error Toast Notifications
--Dark Mode toggle
--Final cleanup + profiling explanation
+    -Error Toast Notifications
+    -Dark Mode toggle
+    -Final cleanup + profiling explanation
+24/11
+    Commit	in future?
+    -Improve Book Details Page UI
+    -Add Book Rating Component (interactive)
+    -Add “Best of the Month” Carousel
+   - Add SearchBar to Home + API connect
+   - Improve Pagination UI
+    -Add Categories Bar (horizontal chips)
+    -Footer
+    -Global UI cleanup + spacing + colors
+
+    Optional UI improvements ()
+    - Best of the Month Carousel
+    - Categories Chips Layout
+    - Improved Pagination UI
+    - Better Book Details Page
+    - Footer
+    - Global spacing cleanup
+
+    Final touches
+    - Error Toast Notifications
+    - Dark Mode
+    - Final cleanup + Profiling Explanation
 
 # Files
 -components:bookcard categoryfilter favoritebutton layout paginaton risingstar searchbar

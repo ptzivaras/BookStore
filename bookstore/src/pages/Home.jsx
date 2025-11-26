@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { fetchBooks, getBookByIsbn, createBook, updateBook, deleteBook } from "../services/api";
+import { fetchBooks } from "../services/api";
 
 import BookCard from "../components/BookCard";
 import Pagination from "../components/Pagination";
 import CategoryFilter from "../components/CategoryFilter";
+import RisingStar from "../components/RisingStar";
 
 export default function Home() {
   const [books, setBooks] = useState([]);
@@ -13,8 +14,8 @@ export default function Home() {
   const [currentPage, setCurrentPage] = useState(1);
   const booksPerPage = 6;
 
-   useEffect(() => {
-     let alive = true;
+  useEffect(() => {
+    let alive = true;
     (async () => {
       try {
         const data = await fetchBooks();
@@ -28,46 +29,44 @@ export default function Home() {
     return () => {
       alive = false;
     };
-   }, []);
+  }, []);
 
-
-  // Extract categories dynamically
+  // Extract categories dynamically from publisher field
   const categories = [...new Set(books.map((b) => b.publisher))];
 
-  // Filter books when category changes
   useEffect(() => {
     if (category === "all") {
       setFilteredBooks(books);
     } else {
       setFilteredBooks(books.filter((b) => b.publisher === category));
     }
-    setCurrentPage(1); // reset pagination on filter
+    setCurrentPage(1);
   }, [category, books]);
 
-  // Pagination logic
   const indexOfLast = currentPage * booksPerPage;
   const indexOfFirst = indexOfLast - booksPerPage;
   const currentBooks = filteredBooks.slice(indexOfFirst, indexOfLast);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Book List</h2>
+    <div className="p-5">
+      
+      {/* Rising Star Section */}
+      <RisingStar />
 
-      {/* Category Filter */}
+      <h2 className="text-2xl font-bold mt-8 mb-4">Book List</h2>
+
       <CategoryFilter
         categories={categories}
         selected={category}
         onChange={setCategory}
       />
 
-      {/* Books List */}
-      <div className="book-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "20px" }}>
+      <div className="grid grid-cols-3 gap-5 mt-4">
         {currentBooks.map((book) => (
           <BookCard key={book.isbn} book={book} />
         ))}
       </div>
 
-      {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalPages={Math.ceil(filteredBooks.length / booksPerPage)}

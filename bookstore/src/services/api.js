@@ -152,3 +152,12 @@ export async function deleteBook(isbn) {
 
   return filtered.length !== before; // true = deleted
 }
+
+/**
+ * Rising Star Book
+ */
+export const getRisingStar = async () => {
+    const response = await api.get("/books/rising-star");
+    return response.data;
+};
+
