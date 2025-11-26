@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import FavoriteButton from "./FavoriteButton";
+import RatingStars from "./RatingStars";
 
 export default function BookCard({ book }) {
   if (!book) return null;
 
-  const cover =
-    book.cover || `https://picsum.photos/seed/${book.isbn}/300/400`;
+  const cover = book.cover || `https://picsum.photos/seed/${book.isbn}/300/400`;
 
   return (
     <div className="card p-3 shadow-sm rounded bg-white">
@@ -15,10 +16,17 @@ export default function BookCard({ book }) {
         className="w-full h-48 object-cover rounded mb-3"
       />
 
-      <h3 className="font-semibold">{book.title}</h3>
-      <p className="text-sm text-slate-600">
+      <h3 className="font-semibold text-lg">{book.title}</h3>
+
+      <p className="text-sm text-slate-600 mb-2">
         <strong>Author:</strong> {book.author}
       </p>
+
+      {/* ⭐ FAVORITE BUTTON RESTORED */}
+      <FavoriteButton isbn={book.isbn} className="mb-2" />
+
+      {/* ⭐ Rating preview restored */}
+      <RatingStars value={book.rating} />
 
       <Link
         to={`/book/${book.isbn}`}
