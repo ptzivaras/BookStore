@@ -1,7 +1,6 @@
-#What problem this app solves? How it helps the customer?
-A user wants to browse books in a very big catalog and he wants to search and save his favorites.
-Customer has many computers and mobile phones. He wants to browse during day and night. He has a family that also want to do the same and age varies 14-72.
-I am trying to find real world problems and add as many react concepts i can find.
+# What problem this app solves?
+1. A Customer wants to browse books in a very big catalog and he wants to search and save his favorites.
+2. Customer has many computers and mobile phones. He wants to browse during day and night. He has a family that also want to do the same and age varies 14-72.
 
 # BookStore is a book management app and customer can..
 1. Browse a catalog of books with covers, ratings, and details
@@ -12,27 +11,28 @@ I am trying to find real world problems and add as many react concepts i can fin
 6. Get visual feedback via toasts and loading overlays
 
 # Skills/features
-I will try to include in the project skills & features for educational purposes. I will also try to add business logicand solve real world problems to be more realistic.
-features/skills: Hooks, Mock, Search, Filters, Favourites, WishList, Persistance, DeepLinks, Carousel, Eager-Lazy-Suspense, Cache, ReactQuerry, CleanArchitecture, UIUX, Profiling, DarkLightMode, Tanstack, Ratings
+1. I will try to include in the project skills & features for educational purposes.
+2.  I will also try to add business logicand solve real world problems to be more realistic.
+3. features/skills: Hooks, Mock, Search, Filters, Favourites, WishList, Persistance, DeepLinks, Carousel, Eager-Lazy-Suspense, Cache, ReactQuerry, CleanArchitecture, UIUX, Profiling, DarkLightMode, Tanstack, Ratings
 
 #Tech/Libraries
-React v18
-Router     - page navigation since its not SPA
-ContextAPI -	Global state (theme, favorites, loading, toasts) — no Redux used for this small app
-useEffect Hook -	Data fetching, localStorage sync, cleanup//Not used for enterprise apps #No(Redux/TanStack Query)
-useState  Hook -	Local component state (forms, filters, pagination)
-Custom Hooks   -	useDarkMode, useFavorites, useLoading, useToast
-localStorage	 - For persist favorites and theme across sessions
-UI   - Tailwind
-Vite - modern build tool
-Mock Api & Mock Book Data - Easier deployment, pure React Focus #NoMemonization(useMemo/useCallback)
+1. React v18
+2. Router     - page navigation since its not SPA
+3. ContextAPI -	Global state (theme, favorites, loading, toasts) — no Redux used for this small app
+4. useEffect Hook -	Data fetching, localStorage sync, cleanup//Not used for enterprise apps #No(Redux/TanStack Query)
+5. useState  Hook -	Local component state (forms, filters, pagination)
+6. Custom Hooks   -	useDarkMode, useFavorites, useLoading, useToast
+7. localStorage	 - For persist favorites and theme across sessions
+8. UI   - Tailwind
+9. Vite - modern build tool
+10. Mock Api & Mock Book Data - Easier deployment, pure React Focus #NoMemonization(useMemo/useCallback)
 
 
-#What Each File Does
+# What Each File Does
 Components.. reusable components
 BookCard.jsx — Displays a single book (cover, title, author, rating) in grid
 Pagination.jsx — Page navigation (Previous/Next, page numbers)
-RatingStars.jsx — Star rating display (⭐⭐⭐⭐⭐)
+RatingStars.jsx — Star rating display (⭐)
 RisingStar.jsx — Featured "Book of the Month" carousel
 SearchBar.jsx — Search input with submit button
 Layout.jsx — Wrapper with header/footer for all pages
