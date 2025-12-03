@@ -86,9 +86,9 @@ localStorage.js   — Helpers for saving/loading data from browser storage
 11. Authentication (login/signup, protected routes). Use React Libary or JWT? No Oath for small apps except if used Microservices for educational reasons.
 
 # Hot Fixes coming before production
-Add Error Boundary (prevents white screen crashes)
-Add cleanup to BookDetail.jsx useEffects
-Add try-catch to localStorage utils
-Add try-catch to form submissions
-Add PropTypes or migrate to TypeScript
-Fix useEffect dependency warnings & add cleanup
+1. Add Error Boundary (prevents white screen crashes)
+2. Add cleanup to BookDetail.jsx useEffects
+3. Add try-catch to localStorage utils
+4. Add try-catch to form submissions
+5. Add PropTypes or migrate to TypeScript
+6. Fix useEffect dependency warnings & add cleanup
