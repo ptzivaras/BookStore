@@ -84,3 +84,11 @@ localStorage.js   — Helpers for saving/loading data from browser storage
 9. Multiple Devices used. Mobile phone has hands, Computer keyboard and mouse. Does this make a problem?
 10. Replace useEffect. Use React Query (for caching, optimistic updates)
 11. Authentication (login/signup, protected routes). Use React Libary or JWT? No Oath for small apps except if used Microservices for educational reasons.
+
+# Hot Fixes coming before production
+Add Error Boundary (prevents white screen crashes)
+Add cleanup to BookDetail.jsx useEffects
+Add try-catch to localStorage utils
+Add try-catch to form submissions
+Add PropTypes or migrate to TypeScript
+Fix useEffect dependency warnings & add cleanup
